@@ -580,10 +580,10 @@ function renderResults() {
     }
     if (r.needsPatchBinder) {
       const patchPails = Math.ceil(r.patchBinderGallons / 5);
-      totalAreaHtml += `<tr><td>Patch Binder</td><td>1</td><td>${r.patchBinderGallons} gallons</td><td>${patchPails} pails</td></tr>`;
+      totalAreaHtml += `<tr><td>Patch Binder</td><td>1</td><td>${r.patchBinderGallons}</td><td>${patchPails} pails</td></tr>`;
     }
     const resurfacerPails = Math.ceil(r.resurfacerGallons / 5);
-    totalAreaHtml += `<tr><td>Court Resurfacer</td><td>${r.resurfacerCoats}</td><td>${r.resurfacerGallons} gallons</td><td>${resurfacerPails} pails</td></tr>`;
+    totalAreaHtml += `<tr><td>Court Resurfacer</td><td>${r.resurfacerCoats}</td><td>${r.resurfacerGallons}</td><td>${resurfacerPails} pails</td></tr>`;
   });
   $('totalAreaBody').innerHTML = totalAreaHtml;
 
@@ -647,7 +647,7 @@ function renderCrackFillers(entryResults) {
     html += `<tr>
       <td>${crackFiller.product}</td>
       <td>${crackFiller.width}</td>
-      <td>${gallonsLabel} gallons</td>
+      <td>${gallonsLabel}</td>
       <td>${pailsLabel} pails</td>
     </tr>`;
   });
