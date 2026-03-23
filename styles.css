@@ -42,6 +42,7 @@ header h1 {
 }
 .header-logo {
   max-width: 520px;
+  width: 90%;
   height: auto;
   margin: 0 auto 12px;
   display: block;
