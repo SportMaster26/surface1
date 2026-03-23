@@ -294,7 +294,7 @@ function calculateEntry(entry, surfaceType) {
     if (colorName !== 'Not Selected') {
       if (!colorTotals[colorName]) colorTotals[colorName] = { area: 0, packs: 0 };
       colorTotals[colorName].area += zone.sqft;
-      colorTotals[colorName].packs += gallons;
+      colorTotals[colorName].packs += Math.ceil(gallons / 5);
     }
   });
 
@@ -599,9 +599,9 @@ function renderResults() {
       const zoneColorLabel = zone.colorName && zone.colorName !== 'Not Selected' ? ' — ' + zone.colorName : '';
       zoneHtml += `<tr class="zone-subheader"><td colspan="4"><span class="legend-swatch" style="background:${zoneColorHex};vertical-align:middle;margin-right:6px"></span>${zone.name} (${fmt(zone.sqft)} sq ft)${zoneColorLabel}</td></tr>`;
       const basePails = Math.ceil(zone.baseGallons / 5);
-      zoneHtml += `<tr><td>Sport Coating Base</td><td>${zone.baseCoats}</td><td>${zone.baseGallons} gallons</td><td>${basePails} pails</td></tr>`;
+      zoneHtml += `<tr><td>Sport Coating Base</td><td>${zone.baseCoats}</td><td>${basePails} - 5-Gallon Pail(s)</td><td></td></tr>`;
       if (zone.colorName !== 'Not Selected') {
-        zoneHtml += `<tr><td>${zone.colorName} Tint Pack</td><td></td><td>${zone.baseGallons} packs</td><td></td></tr>`;
+        zoneHtml += `<tr><td>${zone.colorName} Tint Pack</td><td></td><td>${basePails} ${zone.colorName} Tint Pack(s)</td><td></td></tr>`;
       }
     });
   });
