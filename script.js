@@ -23,12 +23,12 @@ const colorOptions = [
 
 const colorHexMap = {
   'Not Selected': '#f0f0f0',
-  'Light Blue': '#87CEEB',
-  'Blue': '#2563EB',
-  'Light Green': '#90EE90',
-  'Dark Green': '#006400',
-  'Red': '#DC2626',
-  'Gray': '#808080'
+  'Light Blue': '#486186',
+  'Blue': '#2D3B5B',
+  'Light Green': '#445E34',
+  'Dark Green': '#3B4133',
+  'Red': '#6B3736',
+  'Gray': '#6D6D74'
 };
 
 function getColorHex(name) {
