@@ -648,7 +648,7 @@ function renderCrackFillers(entryResults) {
       <td>${crackFiller.product}</td>
       <td>${crackFiller.width}</td>
       <td>${gallonsLabel}</td>
-      <td>${pailsLabel} - 5-Gallon Pail(s)</td>
+      <td>${gallonsLabel} - 1-Gallon Pail(s)</td>
 
     </tr>`;
   });
