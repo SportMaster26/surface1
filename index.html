@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surface 1 Sport Coatings — Product Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Surface 1 Sport Coatings</h1>
+    <p class="subtitle">Product Calculator</p>
+  </header>
+
+  <main class="container">
+    <p class="intro">Calculate the Court Resurfacer, Sport Coating Base, and Color Tint Packs needed for your court surfacing project. Add zones for different color areas.</p>
+
+    <section id="zones-section">
+      <div id="zones-container">
+        <div class="zone-card" data-zone-id="1">
+          <div class="zone-header">
+            <input type="text" class="zone-name" value="Zone 1" aria-label="Zone name">
+            <button type="button" class="btn-remove-zone" title="Remove zone" style="display:none;">&times;</button>
+          </div>
+
+          <div class="input-mode-toggle">
+            <label><input type="radio" name="mode-1" class="input-mode-radio" value="sqft" checked> Square Footage</label>
+            <label><input type="radio" name="mode-1" class="input-mode-radio" value="dimensions"> Dimensions (L &times; W)</label>
+          </div>
+
+          <div class="input-fields">
+            <div class="sqft-input">
+              <label>Square Footage (sq ft):</label>
+              <input type="number" class="sqft-value" min="0" step="any" placeholder="e.g. 1200">
+            </div>
+            <div class="dimensions-input" style="display:none;">
+              <div class="dim-row">
+                <label>Length (ft):</label>
+                <input type="number" class="dim-length" min="0" step="any" placeholder="e.g. 60">
+                <label>Width (ft):</label>
+                <input type="number" class="dim-width" min="0" step="any" placeholder="e.g. 20">
+              </div>
+              <div class="computed-area">Computed Area: <span class="area-display">0</span> sq ft</div>
+            </div>
+          </div>
+
+          <div class="color-select">
+            <label>Color:</label>
+            <select class="color-dropdown">
+              <option value="Light Blue">Light Blue</option>
+              <option value="Blue">Blue</option>
+              <option value="Light Green">Light Green</option>
+              <option value="Dark Green">Dark Green</option>
+              <option value="Gray">Gray</option>
+              <option value="Red">Red</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" id="add-zone-btn" class="btn-add-zone">+ Add Zone</button>
+    </section>
+
+    <button type="button" id="calculate-btn" class="btn-primary">Calculate Materials</button>
+
+    <section id="results-section" style="display:none;">
+      <h2>Results</h2>
+      <div class="results-card">
+        <div class="result-row">
+          <span class="result-label">Total Court Area:</span>
+          <span id="result-total-area" class="result-value"></span>
+        </div>
+        <hr>
+        <div class="result-row">
+          <span class="result-label">Court Resurfacer:</span>
+          <span id="result-resurfacer" class="result-value"></span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Sport Coating Base:</span>
+          <span id="result-base" class="result-value"></span>
+        </div>
+        <hr>
+        <h3>Color Tint Packs</h3>
+        <div id="result-tint-packs"></div>
+      </div>
+      <p class="results-note">All quantities are rounded up to the nearest whole gallon/pack.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; Surface 1 Sport Coatings</p>
+  </footer>
+
+  <template id="zone-template">
+    <div class="zone-card">
+      <div class="zone-header">
+        <input type="text" class="zone-name" aria-label="Zone name">
+        <button type="button" class="btn-remove-zone" title="Remove zone">&times;</button>
+      </div>
+
+      <div class="input-mode-toggle">
+        <label><input type="radio" class="input-mode-radio" value="sqft" checked> Square Footage</label>
+        <label><input type="radio" class="input-mode-radio" value="dimensions"> Dimensions (L &times; W)</label>
+      </div>
+
+      <div class="input-fields">
+        <div class="sqft-input">
+          <label>Square Footage (sq ft):</label>
+          <input type="number" class="sqft-value" min="0" step="any" placeholder="e.g. 1200">
+        </div>
+        <div class="dimensions-input" style="display:none;">
+          <div class="dim-row">
+            <label>Length (ft):</label>
+            <input type="number" class="dim-length" min="0" step="any" placeholder="e.g. 60">
+            <label>Width (ft):</label>
+            <input type="number" class="dim-width" min="0" step="any" placeholder="e.g. 20">
+          </div>
+          <div class="computed-area">Computed Area: <span class="area-display">0</span> sq ft</div>
+        </div>
+      </div>
+
+      <div class="color-select">
+        <label>Color:</label>
+        <select class="color-dropdown">
+          <option value="Light Blue">Light Blue</option>
+          <option value="Blue">Blue</option>
+          <option value="Light Green">Light Green</option>
+          <option value="Dark Green">Dark Green</option>
+          <option value="Gray">Gray</option>
+          <option value="Red">Red</option>
+        </select>
+      </div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
