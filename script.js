@@ -270,6 +270,10 @@ function calculateEntry(entry, surfaceType) {
   const singleCourtSqFt = totalSqFt / (entry.numCourts || 1);
   const zoneAreas = computeZoneAreas(entry.courtType, totalSqFt, entry.numCourts, singleCourtSqFt);
 
+  // Patch Binder: concrete surfaces only
+  const needsPatchBinder = surfaceType === 'concrete' || surfaceType === 'existingConcrete';
+  const patchBinderGallons = needsPatchBinder ? Math.ceil(totalSqFt / 300) : 0;
+
   // Resurfacer: total area
   const resurfacerRate = COVERAGE.resurfacer[surfaceType] || 60;
   const resurfacerCoats = (surfaceType === 'asphalt' || surfaceType === 'existingAsphalt') ? 2 : 1;
@@ -309,6 +313,8 @@ function calculateEntry(entry, surfaceType) {
     courtType: entry.courtType,
     numCourts: entry.numCourts,
     totalSqFt,
+    patchBinderGallons,
+    needsPatchBinder,
     resurfacerGallons,
     resurfacerCoats,
     zones,
@@ -575,6 +581,10 @@ function renderResults() {
     const courtLabel = entryResults.length > 1 ? (r.label + ' (Court ' + (ri + 1) + ')') : r.label;
     if (entryResults.length > 1) {
       totalAreaHtml += `<tr class="zone-header"><td colspan="4">${courtLabel}</td></tr>`;
+    }
+    if (r.needsPatchBinder) {
+      const patchPails = Math.ceil(r.patchBinderGallons / 5);
+      totalAreaHtml += `<tr><td>Patch Binder</td><td>1</td><td>${r.patchBinderGallons} gallons</td><td>${patchPails} pails</td></tr>`;
     }
     const resurfacerPails = Math.ceil(r.resurfacerGallons / 5);
     totalAreaHtml += `<tr><td>Court Resurfacer</td><td>${r.resurfacerCoats}</td><td>${r.resurfacerGallons} gallons</td><td>${resurfacerPails} pails</td></tr>`;
