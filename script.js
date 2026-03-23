@@ -584,10 +584,6 @@ function renderResults() {
     }
     const resurfacerPails = Math.ceil(r.resurfacerGallons / 5);
     totalAreaHtml += `<tr><td>Court Resurfacer</td><td>${r.resurfacerCoats}</td><td>${r.resurfacerGallons}</td><td>${resurfacerPails} - 5-Gallon Pail(s)</td></tr>`;
-    if (r.stripingGallons > 0) {
-      totalAreaHtml += `<tr><td>Line Primer</td><td></td><td>${r.stripingGallons}</td><td>${r.stripingGallons} - 1 Gallon Jug(s)</td></tr>`;
-      totalAreaHtml += `<tr><td>White Line Paint</td><td></td><td>${r.stripingGallons}</td><td>${r.stripingGallons} - 1 Gallon Jug(s)</td></tr>`;
-    }
   });
   $('totalAreaBody').innerHTML = totalAreaHtml;
 
@@ -610,6 +606,21 @@ function renderResults() {
     });
   });
   $('zoneProductsBody').innerHTML = zoneHtml || '<tr><td colspan="4">No zone products</td></tr>';
+
+  // Striping
+  let stripingHtml = '';
+  let anyStriping = false;
+  entryResults.forEach((r, ri) => {
+    if (r.stripingGallons <= 0) return;
+    anyStriping = true;
+    const courtLabel = entryResults.length > 1 ? (r.label + ' (Court ' + (ri + 1) + ')') : r.label;
+    if (entryResults.length > 1) {
+      stripingHtml += `<tr class="zone-header"><td colspan="3">${courtLabel}</td></tr>`;
+    }
+    stripingHtml += `<tr><td>Line Primer</td><td>${r.stripingGallons}</td><td>${r.stripingGallons} - 1 Gallon Jug(s)</td></tr>`;
+    stripingHtml += `<tr><td>White Line Paint</td><td>${r.stripingGallons}</td><td>${r.stripingGallons} - 1 Gallon Jug(s)</td></tr>`;
+  });
+  $('stripingBody').innerHTML = anyStriping ? stripingHtml : '<tr><td colspan="3">N/A for this court type</td></tr>';
 
   // Crack filler estimates
   renderCrackFillers(entryResults);
