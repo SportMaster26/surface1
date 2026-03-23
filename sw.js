@@ -1,13 +1,13 @@
-const CACHE_NAME = 'surface1-v1';
+const CACHE_NAME = 'surface1-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/manifest.json',
-  '/Surface 1 Logo.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  './',
+  './index.html',
+  './styles.css',
+  './script.js',
+  './manifest.json',
+  './Surface 1 Logo.png',
+  './icons/icon-192x192.png',
+  './icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {

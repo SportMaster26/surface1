@@ -2,7 +2,7 @@
   "name": "Surface 1 Product Calculator",
   "short_name": "Surface 1",
   "description": "Calculate Court Resurfacer, Sport Coating Base, and Color Tint Packs for your project.",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0077b6",
