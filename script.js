@@ -17,12 +17,8 @@ const colorOptions = [
   { name: 'Blue' },
   { name: 'Light Green' },
   { name: 'Dark Green' },
-  { name: 'Gray' },
   { name: 'Red' },
-  { name: 'Beige' },
-  { name: 'Maroon' },
-  { name: 'Orange' },
-  { name: 'Yellow' }
+  { name: 'Gray' }
 ];
 
 const colorHexMap = {
@@ -31,12 +27,8 @@ const colorHexMap = {
   'Blue': '#2563EB',
   'Light Green': '#90EE90',
   'Dark Green': '#006400',
-  'Gray': '#808080',
   'Red': '#DC2626',
-  'Beige': '#C8B48C',
-  'Maroon': '#800000',
-  'Orange': '#DD5D36',
-  'Yellow': '#E4BD43'
+  'Gray': '#808080'
 };
 
 function getColorHex(name) {
@@ -280,7 +272,7 @@ function calculateEntry(entry, surfaceType) {
 
   // Resurfacer: total area
   const resurfacerRate = COVERAGE.resurfacer[surfaceType] || 60;
-  const resurfacerCoats = surfaceType === 'asphalt' ? 2 : 1;
+  const resurfacerCoats = (surfaceType === 'asphalt' || surfaceType === 'existingAsphalt') ? 2 : 1;
   const resurfacerGallons = Math.ceil((totalSqFt / resurfacerRate) * resurfacerCoats);
 
   // Sport Coating Base per zone
