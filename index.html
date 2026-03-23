@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0077b6" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Surface 1" />
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+  <link rel="manifest" href="manifest.json" />
   <title>Surface 1 Sport Coatings — Product Calculator</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -61,7 +67,7 @@
       <p class="disclaimer">Coverage rates may vary depending on width and depth of the cracks.</p>
       <table>
         <thead>
-          <tr><th>Product</th><th>Recommended Width</th><th>Gallons Needed (Est.)</th><th>Material Totals</th></tr>
+          <tr><th>Product</th><th>Recommended Width</th><th>Material Totals</th></tr>
         </thead>
         <tbody id="crackBody"></tbody>
       </table>
@@ -103,5 +109,10 @@
   </main>
 
   <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
 </body>
 </html>
