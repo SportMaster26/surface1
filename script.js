@@ -617,9 +617,8 @@ function renderResults() {
     if (entryResults.length > 1) {
       stripingHtml += `<tr class="zone-header"><td colspan="3">${courtLabel}</td></tr>`;
     }
-    const stripePails = Math.ceil(r.stripingGallons / 5);
-    stripingHtml += `<tr><td>Line Primer</td><td>${r.stripingGallons} gallons</td><td>${stripePails} pails</td></tr>`;
-    stripingHtml += `<tr><td>Textured White Line Paint</td><td>${r.stripingGallons} gallons</td><td>${stripePails} pails</td></tr>`;
+    stripingHtml += `<tr><td>Line Primer</td><td>${r.stripingGallons} - 1 Gallon Jug(s)</td><td></td></tr>`;
+    stripingHtml += `<tr><td>White Line Paint</td><td>${r.stripingGallons} - 1 Gallon Jug(s)</td><td></td></tr>`;
   });
   $('stripingBody').innerHTML = anyStriping ? stripingHtml : '<tr><td colspan="3">N/A for this court type</td></tr>';
 
