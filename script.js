@@ -36,11 +36,7 @@ function getColorHex(name) {
 }
 
 // ── Crack filler reference ──
-const crackFillers = [
-  { product: 'Acrylic Crack Patch', rateLabel: '75 - 150 feet of Cracks', rateMin: 75, rateMax: 150, width: 'For Cracks up to 1" wide' },
-  { product: 'CrackMagic', rateLabel: '75 - 150 feet of Cracks', rateMin: 75, rateMax: 150, width: 'For Cracks up to 1/2" wide' },
-  { product: 'CourtFlex', rateLabel: '150 - 200 feet of Cracks', rateMin: 150, rateMax: 200, width: 'For Cracks up to 1/2" wide' }
-];
+const crackFiller = { product: 'Acrylic Crack Filler', rateMin: 75, rateMax: 150, width: 'For Cracks up to 1" wide' };
 
 // ── Court type zone definitions ──
 const courtDefs = {
@@ -622,8 +618,8 @@ function renderResults() {
       stripingHtml += `<tr class="zone-header"><td colspan="3">${courtLabel}</td></tr>`;
     }
     const stripePails = Math.ceil(r.stripingGallons / 5);
-    stripingHtml += `<tr><td>Stripe Rite</td><td>${r.stripingGallons} gallons</td><td>${stripePails} pails</td></tr>`;
-    stripingHtml += `<tr><td>White Line Paint</td><td>${r.stripingGallons} gallons</td><td>${stripePails} pails</td></tr>`;
+    stripingHtml += `<tr><td>Line Primer</td><td>${r.stripingGallons} gallons</td><td>${stripePails} pails</td></tr>`;
+    stripingHtml += `<tr><td>Textured White Line Paint</td><td>${r.stripingGallons} gallons</td><td>${stripePails} pails</td></tr>`;
   });
   $('stripingBody').innerHTML = anyStriping ? stripingHtml : '<tr><td colspan="3">N/A for this court type</td></tr>';
 
@@ -643,20 +639,18 @@ function renderCrackFillers(entryResults) {
       const res = calculateEntry(e, $('surfaceType').value);
       return res.label === r.label;
     }) || courtEntries[ri];
-    const radioName = 'crackSelect_' + ri;
-    crackFillers.forEach((cf, ci) => {
-      const gallonsMin = Math.ceil(entry.crackLinearFeet / cf.rateMax);
-      const gallonsMax = Math.ceil(entry.crackLinearFeet / cf.rateMin);
-      const gallonsLabel = gallonsMin === gallonsMax ? gallonsMin : gallonsMin + ' - ' + gallonsMax;
-      html += `<tr>
-        <td><input type="radio" name="${radioName}" ${ci === 0 ? 'checked' : ''} /></td>
-        <td>${r.label}</td>
-        <td>${cf.product}</td>
-        <td>${cf.rateLabel}</td>
-        <td>${cf.width}</td>
-        <td>${gallonsLabel} gallons</td>
-      </tr>`;
-    });
+    const gallonsMin = Math.ceil(entry.crackLinearFeet / crackFiller.rateMax);
+    const gallonsMax = Math.ceil(entry.crackLinearFeet / crackFiller.rateMin);
+    const gallonsLabel = gallonsMin === gallonsMax ? gallonsMin : gallonsMin + ' - ' + gallonsMax;
+    const pailsMin = Math.ceil(gallonsMin / 5);
+    const pailsMax = Math.ceil(gallonsMax / 5);
+    const pailsLabel = pailsMin === pailsMax ? pailsMin : pailsMin + ' - ' + pailsMax;
+    html += `<tr>
+      <td>${crackFiller.product}</td>
+      <td>${crackFiller.width}</td>
+      <td>${gallonsLabel} gallons</td>
+      <td>${pailsLabel} pails</td>
+    </tr>`;
   });
   $('crackBody').innerHTML = html;
 }
