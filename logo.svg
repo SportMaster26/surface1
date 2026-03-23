@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 100" width="520" height="100">
   <style>
-    .sport { font-family: 'Arial Black', 'Impact', sans-serif; font-size: 58px; font-weight: 900; font-style: italic; fill: #CC0000; }
+    .sport { font-family: 'Arial Black', 'Impact', sans-serif; font-size: 58px; font-weight: 900; font-style: italic; fill: #1565C0; }
     .master { font-family: 'Arial Black', 'Impact', sans-serif; font-size: 58px; font-weight: 900; font-style: italic; fill: #1A1A1A; }
     .reg { font-family: Arial, sans-serif; font-size: 18px; fill: #1A1A1A; }
     .subtitle { font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #1A1A1A; letter-spacing: 1px; }
