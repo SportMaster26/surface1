@@ -1,137 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Surface 1 Sport Coatings — Product Calculator</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Surface 1 Sport Coatings</h1>
-    <p class="subtitle">Product Calculator</p>
-  </header>
-
   <main class="container">
-    <p class="intro">Calculate the Court Resurfacer, Sport Coating Base, and Color Tint Packs needed for your court surfacing project. Add zones for different color areas.</p>
+    <header>
+      <h1>Surface 1 Sport Coatings</h1>
+      <h2 class="header-subtitle">Product Calculator</h2>
+      <p>Calculate Court Resurfacer, Sport Coating Base, and Color Tint Packs for your project.</p>
+    </header>
 
-    <section id="zones-section">
-      <div id="zones-container">
-        <div class="zone-card" data-zone-id="1">
-          <div class="zone-header">
-            <input type="text" class="zone-name" value="Zone 1" aria-label="Zone name">
-            <button type="button" class="btn-remove-zone" title="Remove zone" style="display:none;">&times;</button>
-          </div>
-
-          <div class="input-mode-toggle">
-            <label><input type="radio" name="mode-1" class="input-mode-radio" value="sqft" checked> Square Footage</label>
-            <label><input type="radio" name="mode-1" class="input-mode-radio" value="dimensions"> Dimensions (L &times; W)</label>
-          </div>
-
-          <div class="input-fields">
-            <div class="sqft-input">
-              <label>Square Footage (sq ft):</label>
-              <input type="number" class="sqft-value" min="0" step="any" placeholder="e.g. 1200">
-            </div>
-            <div class="dimensions-input" style="display:none;">
-              <div class="dim-row">
-                <label>Length (ft):</label>
-                <input type="number" class="dim-length" min="0" step="any" placeholder="e.g. 60">
-                <label>Width (ft):</label>
-                <input type="number" class="dim-width" min="0" step="any" placeholder="e.g. 20">
-              </div>
-              <div class="computed-area">Computed Area: <span class="area-display">0</span> sq ft</div>
-            </div>
-          </div>
-
-          <div class="color-select">
-            <label>Color:</label>
-            <select class="color-dropdown">
-              <option value="Light Blue">Light Blue</option>
-              <option value="Blue">Blue</option>
-              <option value="Light Green">Light Green</option>
-              <option value="Dark Green">Dark Green</option>
-              <option value="Gray">Gray</option>
-              <option value="Red">Red</option>
-            </select>
-          </div>
-        </div>
+    <!-- ─── Step 1: Surface ─── -->
+    <section class="card" aria-label="Surface">
+      <h2>Step 1: Surface</h2>
+      <div class="form-row">
+        <label>
+          <span>Surface / Base Type</span>
+          <select id="surfaceType">
+            <option value="concrete">New Concrete</option>
+            <option value="asphalt">New Asphalt</option>
+            <option value="existingConcrete">Existing Concrete</option>
+            <option value="existingAsphalt">Existing Asphalt</option>
+          </select>
+        </label>
       </div>
-
-      <button type="button" id="add-zone-btn" class="btn-add-zone">+ Add Zone</button>
     </section>
 
-    <button type="button" id="calculate-btn" class="btn-primary">Calculate Materials</button>
+    <!-- ─── Step 2: Court Entries ─── -->
+    <section class="card" aria-label="Court Entries">
+      <h2>Step 2: Add Courts</h2>
+      <p class="step-hint">Add court types, set dimensions, and choose zone colors.</p>
+      <div id="courtEntriesContainer"></div>
+      <button id="addCourtBtn" class="btn-add">+ Add Court</button>
+    </section>
 
-    <section id="results-section" style="display:none;">
-      <h2>Results</h2>
-      <div class="results-card">
-        <div class="result-row">
-          <span class="result-label">Total Court Area:</span>
-          <span id="result-total-area" class="result-value"></span>
-        </div>
-        <hr>
-        <div class="result-row">
-          <span class="result-label">Court Resurfacer:</span>
-          <span id="result-resurfacer" class="result-value"></span>
-        </div>
-        <div class="result-row">
-          <span class="result-label">Sport Coating Base:</span>
-          <span id="result-base" class="result-value"></span>
-        </div>
-        <hr>
-        <h3>Color Tint Packs</h3>
-        <div id="result-tint-packs"></div>
-      </div>
-      <p class="results-note">All quantities are rounded up to the nearest whole gallon/pack.</p>
+    <!-- ─── Project Summary ─── -->
+    <section class="card" aria-label="Summary">
+      <h2>Project Summary</h2>
+      <div id="summaryGrid" class="summary-grid"></div>
+    </section>
+
+    <!-- ─── Zone Area Breakdown ─── -->
+    <section class="card" aria-label="Zone Areas">
+      <h2>Zone Area Breakdown</h2>
+      <table>
+        <thead>
+          <tr><th>Court</th><th>Zone</th><th>Square Feet</th><th>Square Yards</th></tr>
+        </thead>
+        <tbody id="zoneAreasBody"></tbody>
+      </table>
+    </section>
+
+    <!-- ─── Crack Filler ─── -->
+    <section class="card hidden" id="crackFillerSection" aria-label="Crack Filler">
+      <h2>Crack Filler Estimates</h2>
+      <p class="disclaimer">Coverage rates may vary depending on width and depth of the cracks.</p>
+      <table>
+        <thead>
+          <tr><th></th><th>Court</th><th>Product</th><th>Linear Ft / Gallon</th><th>Recommended Width</th><th>Gallons Needed (Est.)</th></tr>
+        </thead>
+        <tbody id="crackBody"></tbody>
+      </table>
+    </section>
+
+    <!-- ─── Total Area Materials ─── -->
+    <section class="card" aria-label="Total Area Materials">
+      <h2>Total Area Materials (Resurfacer)</h2>
+      <table>
+        <thead>
+          <tr><th>Material</th><th>Coats</th><th>Gallons Needed</th></tr>
+        </thead>
+        <tbody id="totalAreaBody"></tbody>
+      </table>
+    </section>
+
+    <!-- ─── Zone Product Options ─── -->
+    <section class="card" aria-label="Zone Products">
+      <h2>Court Zone Product Options</h2>
+      <table>
+        <thead>
+          <tr><th>Material</th><th>Coats</th><th>Gallons Needed</th></tr>
+        </thead>
+        <tbody id="zoneProductsBody"></tbody>
+      </table>
+    </section>
+
+    <!-- ─── Striping ─── -->
+    <section class="card" aria-label="Striping">
+      <h2>Striping</h2>
+      <table>
+        <thead>
+          <tr><th>Material</th><th>Gallons Needed</th></tr>
+        </thead>
+        <tbody id="stripingBody"></tbody>
+      </table>
     </section>
   </main>
-
-  <footer>
-    <p>&copy; Surface 1 Sport Coatings</p>
-  </footer>
-
-  <template id="zone-template">
-    <div class="zone-card">
-      <div class="zone-header">
-        <input type="text" class="zone-name" aria-label="Zone name">
-        <button type="button" class="btn-remove-zone" title="Remove zone">&times;</button>
-      </div>
-
-      <div class="input-mode-toggle">
-        <label><input type="radio" class="input-mode-radio" value="sqft" checked> Square Footage</label>
-        <label><input type="radio" class="input-mode-radio" value="dimensions"> Dimensions (L &times; W)</label>
-      </div>
-
-      <div class="input-fields">
-        <div class="sqft-input">
-          <label>Square Footage (sq ft):</label>
-          <input type="number" class="sqft-value" min="0" step="any" placeholder="e.g. 1200">
-        </div>
-        <div class="dimensions-input" style="display:none;">
-          <div class="dim-row">
-            <label>Length (ft):</label>
-            <input type="number" class="dim-length" min="0" step="any" placeholder="e.g. 60">
-            <label>Width (ft):</label>
-            <input type="number" class="dim-width" min="0" step="any" placeholder="e.g. 20">
-          </div>
-          <div class="computed-area">Computed Area: <span class="area-display">0</span> sq ft</div>
-        </div>
-      </div>
-
-      <div class="color-select">
-        <label>Color:</label>
-        <select class="color-dropdown">
-          <option value="Light Blue">Light Blue</option>
-          <option value="Blue">Blue</option>
-          <option value="Light Green">Light Green</option>
-          <option value="Dark Green">Dark Green</option>
-          <option value="Gray">Gray</option>
-          <option value="Red">Red</option>
-        </select>
-      </div>
-    </div>
-  </template>
 
   <script src="script.js"></script>
 </body>
