@@ -6,9 +6,9 @@
 :root {
   --bg: #f2f2f2;
   --card-bg: #ffffff;
-  --accent: #CC0000;
-  --accent-light: #E03030;
-  --accent-pale: #fce4e4;
+  --accent: #1565C0;
+  --accent-light: #1E88E5;
+  --accent-pale: #e3f2fd;
   --accent-dark: #1A1A1A;
   --text: #1A1A1A;
   --text-muted: #555555;
@@ -142,7 +142,7 @@ select:focus,
 input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.15);
+  box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.15);
 }
 .input-highlight {
   background: var(--highlight);
@@ -201,7 +201,7 @@ tbody tr:hover {
   background: #f7f9fb;
 }
 .zone-header td {
-  background: #fce4e4;
+  background: #e3f2fd;
   font-weight: 700;
   color: var(--accent);
   padding: 8px 10px;
@@ -298,7 +298,7 @@ tbody tr:hover {
   width: 100%;
   padding: 10px;
   margin-top: 8px;
-  background: #fce4e4;
+  background: #e3f2fd;
   color: var(--accent);
   border: 2px dashed var(--accent);
   border-radius: var(--radius);
@@ -308,8 +308,8 @@ tbody tr:hover {
   transition: background 0.15s, border-color 0.15s;
 }
 .btn-add:hover {
-  background: #f5c6c6;
-  border-color: #990000;
+  background: #bbdefb;
+  border-color: #0D47A1;
 }
 .btn-remove {
   padding: 4px 12px;
