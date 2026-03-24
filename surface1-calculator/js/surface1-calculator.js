@@ -220,11 +220,14 @@ function renderLegend(zones, zoneColors) {
 function getHiddenZoneIndices(courtType, singleCourtSqFt) {
   const hidden = [];
   const def = courtDefs[courtType];
-  if (courtType === 'pickleball' && singleCourtSqFt <= 880) {
-    def.zones.forEach((z, i) => { if (z.name === 'Total Area') hidden.push(i); });
-  }
-  if (courtType === 'tennis' && singleCourtSqFt <= 2808) {
-    def.zones.forEach((z, i) => { if (z.name === 'Outside Area') hidden.push(i); });
+  // Only hide zones when user has entered actual dimensions (sqft > 0)
+  if (singleCourtSqFt > 0) {
+    if (courtType === 'pickleball' && singleCourtSqFt <= 880) {
+      def.zones.forEach((z, i) => { if (z.name === 'Total Area') hidden.push(i); });
+    }
+    if (courtType === 'tennis' && singleCourtSqFt <= 2808) {
+      def.zones.forEach((z, i) => { if (z.name === 'Outside Area') hidden.push(i); });
+    }
   }
   return hidden;
 }
