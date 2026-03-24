@@ -17,13 +17,13 @@ function s1calc_enqueue_assets() {
         's1calc-styles',
         plugin_dir_url(__FILE__) . 'css/surface1-calculator.css',
         array(),
-        '1.2.0'
+        '1.3.0'
     );
     wp_enqueue_script(
         's1calc-script',
         plugin_dir_url(__FILE__) . 'js/surface1-calculator.js',
         array(),
-        '1.2.0',
+        '1.3.0',
         true
     );
 }
