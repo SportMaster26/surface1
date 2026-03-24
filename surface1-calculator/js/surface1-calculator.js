@@ -347,9 +347,9 @@ function createEntry(courtType) {
     courtType,
     numCourts: 1,
     areaInputMode: 'wxl',
-    width: def.defaultWidth,
-    length: def.defaultLength,
-    areaValue: def.defaultWidth * def.defaultLength,
+    width: '',
+    length: '',
+    areaValue: '',
     crackFiller: false,
     crackLinearFeet: 0,
     zoneColors: def.zones.map((z, i) => i === 0 ? 'Light Blue' : 'Blue')
@@ -453,15 +453,15 @@ function renderCourtEntries() {
             </label>
             <label class="entry-wxl-field${entry.areaInputMode !== 'wxl' ? ' hidden' : ''}">
               <span>Width (Feet)</span>
-              <input class="entry-width input-highlight" type="number" min="0" step="0.1" value="${entry.width}" />
+              <input class="entry-width input-highlight" type="number" min="0" step="0.1" value="${entry.width}" placeholder="Enter Width Here" />
             </label>
             <label class="entry-wxl-field${entry.areaInputMode !== 'wxl' ? ' hidden' : ''}">
               <span>Length (Feet)</span>
-              <input class="entry-length input-highlight" type="number" min="0" step="0.1" value="${entry.length}" />
+              <input class="entry-length input-highlight" type="number" min="0" step="0.1" value="${entry.length}" placeholder="Enter Length Here" />
             </label>
             <label class="entry-direct-field${entry.areaInputMode === 'wxl' ? ' hidden' : ''}">
               <span>Square Feet</span>
-              <input class="entry-area-value input-highlight" type="number" min="0" step="0.1" value="${entry.areaValue}" />
+              <input class="entry-area-value input-highlight" type="number" min="0" step="0.1" value="${entry.areaValue}" placeholder="Enter Sq. Ft. Here" />
             </label>
           </div>
           <div class="form-row">${zoneColorsHtml}</div>
@@ -481,9 +481,9 @@ function renderCourtEntries() {
       const newType = e.target.value;
       const newDef = courtDefs[newType];
       entry.courtType = newType;
-      entry.width = newDef.defaultWidth;
-      entry.length = newDef.defaultLength;
-      entry.areaValue = newDef.defaultWidth * newDef.defaultLength;
+      entry.width = '';
+      entry.length = '';
+      entry.areaValue = '';
       entry.numCourts = newType === 'totalArea' ? 1 : entry.numCourts;
       entry.zoneColors = newDef.zones.map((z, i) => i === 0 ? 'Light Blue' : 'Blue');
       renderCourtEntries();
