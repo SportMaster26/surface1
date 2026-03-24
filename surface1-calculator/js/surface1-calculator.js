@@ -496,9 +496,27 @@ function renderCourtEntries() {
     // Event: generic field changes
     const onFieldChange = () => {
       readEntryFromDOM(entry);
+      const currentDef = courtDefs[entry.courtType];
+      const entrySqFt = getEntrySqFt(entry);
+      const singleSqFt = entrySqFt / (entry.numCourts || 1);
+      const hiddenZones = getHiddenZoneIndices(entry.courtType, singleSqFt);
+
+      // Live-update zone color visibility based on current dimensions
+      currentDef.zones.forEach((zone, i) => {
+        const label = card.querySelector(`[data-zone-label="${i}"]`);
+        if (label) {
+          const shouldHide = hiddenZones.includes(i);
+          label.style.display = shouldHide ? 'none' : '';
+          if (shouldHide) {
+            const sel = label.querySelector('.entry-zone-color');
+            if (sel) sel.value = 'Not Selected';
+            entry.zoneColors[i] = 'Not Selected';
+          }
+        }
+      });
+
       const previewDiv = card.querySelector('.preview-svg');
       const legendDiv = card.querySelector('.preview-legend');
-      const currentDef = courtDefs[entry.courtType];
       previewDiv.innerHTML = renderCourtPreview(entry.courtType, entry.zoneColors);
       legendDiv.innerHTML = renderLegend(currentDef.zones, entry.zoneColors);
       renderResults();
