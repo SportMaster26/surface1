@@ -666,7 +666,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Only initialize if our plugin container exists on this page
   if (!document.getElementById('s1calc-app')) return;
 
-  courtEntries.push(createEntry('tennis'));
   renderCourtEntries();
   renderResults();
 

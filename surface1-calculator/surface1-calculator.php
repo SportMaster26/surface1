@@ -35,12 +35,6 @@ function s1calc_shortcode($atts) {
     ?>
     <div id="s1calc-app" class="s1calc">
       <div class="s1calc-container">
-        <header>
-          <img src="<?php echo $plugin_url; ?>images/Surface 1 Logo.png" alt="Surface 1 Sport Surfacing Products" class="header-logo" />
-          <h2 class="header-subtitle">Product Calculator</h2>
-          <p>Calculate Court Resurfacer, Sport Coating Base, and Color Tint Packs for your project.</p>
-        </header>
-
         <!-- Step 1: Surface -->
         <section class="card" aria-label="Surface">
           <h2>Step 1: Surface</h2>
