@@ -76,7 +76,7 @@
   color: var(--accent-dark);
   margin-bottom: 12px;
   padding-bottom: 6px;
-  border-bottom: 2px solid #91D74A;
+  border-bottom: 2px solid #91D74A !important;
 }
 .s1calc .step-hint {
   font-size: 0.82rem;
@@ -158,7 +158,7 @@
 }
 .s1calc .summary-item {
   background: #f9f9f9;
-  border-left: 4px solid #91D74A;
+  border-left: 4px solid #91D74A !important;
   border-radius: 0 var(--radius) var(--radius) 0;
   padding: 10px 14px;
   display: flex;
@@ -185,18 +185,19 @@
   font-size: 0.88rem;
 }
 .s1calc thead th {
-  background: #1F6A9C;
-  color: #FFFFFF;
+  background: #1F6A9C !important;
+  color: #FFFFFF !important;
   padding: 8px 10px;
   text-align: left;
   font-weight: 600;
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  opacity: 1 !important;
 }
 .s1calc tbody td {
   padding: 7px 10px;
-  border-bottom: 1px solid #91D74A;
+  border-bottom: 1px solid #91D74A !important;
 }
 .s1calc tbody tr:hover {
   background: #f7f9fb;
@@ -206,14 +207,14 @@
   font-weight: 700;
   color: var(--accent);
   padding: 8px 10px;
-  border-bottom: 2px solid #91D74A;
+  border-bottom: 2px solid #91D74A !important;
 }
 .s1calc .zone-subheader td {
   background: #f5f5f5;
   font-weight: 600;
   color: var(--text);
   padding: 6px 10px 6px 20px;
-  border-bottom: 1px solid #91D74A;
+  border-bottom: 1px solid #91D74A !important;
   font-size: 0.84rem;
 }
 
