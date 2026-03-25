@@ -70,7 +70,7 @@
   box-shadow: var(--shadow);
   padding: 20px 24px;
   margin-bottom: 20px;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 .s1calc .card h2 {
   font-size: 1.1rem;
@@ -181,9 +181,13 @@
 
 /* ── Tables ── */
 .s1calc table {
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
   border-collapse: collapse;
   font-size: 0.88rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .s1calc thead th {
   background: #1F6A9C !important;
@@ -194,11 +198,16 @@
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  white-space: normal;
+  word-wrap: break-word;
   opacity: 1 !important;
 }
 .s1calc tbody td {
   padding: 7px 10px;
   border-bottom: 1px solid #91D74A !important;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .s1calc tbody tr:hover {
   background: #f7f9fb;
@@ -370,20 +379,12 @@
   .s1calc .summary-item .value {
     font-size: 1rem;
   }
-  .s1calc .card {
-    overflow-x: hidden;
-  }
   .s1calc table {
     font-size: 0.7rem;
-    table-layout: fixed;
-    width: 100%;
-    word-wrap: break-word;
   }
   .s1calc thead th,
   .s1calc tbody td {
     padding: 4px 3px;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .s1calc thead th {
     font-size: 0.65rem;
