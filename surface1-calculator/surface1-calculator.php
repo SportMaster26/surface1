@@ -94,7 +94,7 @@ function s1calc_shortcode($atts) {
         <section class="card" aria-label="Total Area Materials">
           <h2>Total Area Materials (Resurfacer)</h2>
           <table class="s1calc-tbl-4col">
-            <colgroup><col style="width:30%"><col style="width:14%"><col style="width:20%"><col style="width:36%"></colgroup>
+            <colgroup><col style="width:25%"><col style="width:18%"><col style="width:22%"><col style="width:35%"></colgroup>
             <thead>
               <tr><th>Material</th><th>Coats</th><th>Gallons</th><th>Totals</th></tr>
             </thead>
@@ -106,7 +106,7 @@ function s1calc_shortcode($atts) {
         <section class="card" aria-label="Zone Products">
           <h2>Court Zone Product Options</h2>
           <table class="s1calc-tbl-4col">
-            <colgroup><col style="width:30%"><col style="width:14%"><col style="width:20%"><col style="width:36%"></colgroup>
+            <colgroup><col style="width:25%"><col style="width:18%"><col style="width:22%"><col style="width:35%"></colgroup>
             <thead>
               <tr><th>Material</th><th>Coats</th><th>Gallons</th><th>Totals</th></tr>
             </thead>

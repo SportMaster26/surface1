@@ -389,6 +389,7 @@
   .s1calc thead th {
     font-size: 0.65rem;
     letter-spacing: 0;
+    white-space: nowrap;
   }
   .s1calc .zone-header td,
   .s1calc .zone-subheader td {
