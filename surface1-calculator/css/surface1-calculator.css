@@ -331,15 +331,71 @@
 
 /* ── Responsive ── */
 @media (max-width: 700px) {
+  .s1calc .s1calc-container {
+    padding: 12px 8px 32px;
+  }
+  .s1calc .card {
+    padding: 14px 12px;
+    margin-bottom: 14px;
+  }
+  .s1calc header h1 {
+    font-size: 1.3rem;
+  }
+  .s1calc header .header-subtitle {
+    font-size: 1rem;
+  }
+  .s1calc .header-logo {
+    max-width: 280px;
+  }
   .s1calc .entry-body {
     grid-template-columns: 1fr;
   }
   .s1calc .entry-preview {
     order: -1;
   }
-  .s1calc .form-row { grid-template-columns: 1fr; }
-  .s1calc .summary-grid { grid-template-columns: 1fr 1fr; }
-  .s1calc table { font-size: 0.8rem; }
+  .s1calc .preview-svg {
+    max-width: 180px;
+  }
+  .s1calc .form-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .s1calc .summary-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .s1calc .summary-item {
+    padding: 8px 10px;
+  }
+  .s1calc .summary-item .value {
+    font-size: 1rem;
+  }
+  .s1calc table {
+    font-size: 0.78rem;
+  }
   .s1calc thead th,
-  .s1calc tbody td { padding: 6px 6px; }
+  .s1calc tbody td {
+    padding: 5px 5px;
+  }
+  .s1calc select,
+  .s1calc input[type="number"],
+  .s1calc input[type="text"],
+  .s1calc input[type="email"],
+  .s1calc input[type="tel"] {
+    font-size: 0.88rem;
+    padding: 7px 8px;
+  }
+  .s1calc .btn-add {
+    padding: 8px;
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .s1calc .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  .s1calc .card {
+    padding: 10px 8px;
+  }
 }
