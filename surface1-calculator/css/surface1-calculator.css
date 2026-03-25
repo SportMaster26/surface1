@@ -4,7 +4,7 @@
 /* Scoped reset */
 .s1calc *,
 .s1calc *::before,
-.s1calc *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.s1calc *::after { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Funnel Sans', sans-serif !important; }
 
 /* Variables scoped to plugin wrapper */
 .s1calc {
