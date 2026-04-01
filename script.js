@@ -252,13 +252,11 @@ function computeZoneAreas(courtType, totalSqFt, numCourts, singleCourtSqFt) {
 }
 
 function getEntrySqFt(entry) {
-  let singleCourtSqFt = 0;
   if (entry.areaInputMode === 'wxl') {
-    singleCourtSqFt = entry.width * entry.length;
+    return entry.width * entry.length;
   } else {
-    singleCourtSqFt = entry.areaValue;
+    return entry.areaValue;
   }
-  return singleCourtSqFt * (entry.numCourts || 1);
 }
 
 function calculateEntry(entry, surfaceType) {
