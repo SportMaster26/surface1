@@ -222,6 +222,12 @@ function getHiddenZoneIndices(courtType, singleCourtSqFt) {
   if (courtType === 'tennis' && singleCourtSqFt <= 2808) {
     def.zones.forEach((z, i) => { if (z.name === 'Outside Area') hidden.push(i); });
   }
+  if (courtType === 'basketballFull' && singleCourtSqFt <= 4200) {
+    def.zones.forEach((z, i) => { if (z.name === 'Border') hidden.push(i); });
+  }
+  if (courtType === 'basketballHalf' && singleCourtSqFt <= 2100) {
+    def.zones.forEach((z, i) => { if (z.name === 'Border') hidden.push(i); });
+  }
   return hidden;
 }
 
