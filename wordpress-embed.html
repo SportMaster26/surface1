@@ -1,3 +1,438 @@
+<div id="s1-calc">
+<style>
+#s1-calc *, #s1-calc *::before, #s1-calc *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Reset & Base ── */
+
+#s1-calc {
+  --bg: #f2f2f2;
+  --card-bg: #ffffff;
+  --accent: #1565C0;
+  --accent-light: #1E88E5;
+  --accent-pale: #e3f2fd;
+  --accent-dark: #1A1A1A;
+  --text: #1A1A1A;
+  --text-muted: #555555;
+  --border: #d5d5d5;
+  --highlight: #fff9c4;
+  --radius: 8px;
+  --shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+#s1-calc {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+#s1-calc .container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+/* ── Header ── */
+#s1-calc header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+#s1-calc header h1 {
+  font-size: 1.75rem;
+  color: var(--accent-dark);
+}
+#s1-calc .header-logo {
+  max-width: 520px;
+  width: 90%;
+  height: auto;
+  margin: 0 auto 12px;
+  display: block;
+}
+#s1-calc header .header-subtitle {
+  font-size: 1.2rem;
+  color: var(--accent);
+  font-weight: 600;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 6px;
+}
+#s1-calc header p {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Cards ── */
+#s1-calc .card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+#s1-calc .card h2 {
+  font-size: 1.1rem;
+  color: var(--accent-dark);
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--accent);
+}
+#s1-calc .step-hint {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+#s1-calc .disclaimer {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+/* ── Form Layout ── */
+#s1-calc .form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+#s1-calc label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+#s1-calc label.checkbox-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  align-self: end;
+  padding-bottom: 8px;
+}
+#s1-calc label > span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+select,
+input[type="number"],
+input[type="text"],
+input[type="email"],
+#s1-calc input[type="tel"] {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 0.95rem;
+  background: #fff;
+  color: var(--text);
+  transition: border-color 0.15s;
+}
+#s1-calc input[readonly] {
+  background: #f5f5f5;
+  font-weight: 600;
+  cursor: default;
+}
+#s1-calc select:disabled {
+  background: #f5f5f5;
+  cursor: default;
+  opacity: 0.8;
+}
+select:focus,
+#s1-calc input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.15);
+}
+#s1-calc .input-highlight {
+  background: var(--highlight);
+}
+#s1-calc .hidden { display: none !important; }
+
+/* ── Summary Grid ── */
+#s1-calc .summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+#s1-calc .summary-item {
+  background: #f9f9f9;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#s1-calc .summary-item .label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+#s1-calc .summary-item .value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── Tables ── */
+#s1-calc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+#s1-calc thead th {
+  background: var(--accent-dark);
+  color: #fff;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+#s1-calc tbody td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+}
+#s1-calc tbody tr:hover {
+  background: #f7f9fb;
+}
+#s1-calc .zone-header td {
+  background: #e3f2fd;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--accent);
+}
+#s1-calc .zone-subheader td {
+  background: #f5f5f5;
+  font-weight: 600;
+  color: var(--text);
+  padding: 6px 10px 6px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.84rem;
+}
+
+/* ── Court Entry Cards ── */
+#s1-calc .court-entry-card {
+  background: #f8fafb;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+#s1-calc .entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+#s1-calc .entry-header h3 {
+  font-size: 1rem;
+  color: var(--accent-dark);
+  margin: 0;
+}
+#s1-calc .entry-#s1-calc {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 20px;
+  align-items: start;
+}
+#s1-calc .entry-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Court Preview ── */
+#s1-calc .entry-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+#s1-calc .preview-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+#s1-calc .preview-svg {
+  width: 100%;
+  max-width: 280px;
+}
+#s1-calc .court-svg {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+#s1-calc .preview-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+#s1-calc .legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+#s1-calc .legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+/* ── Buttons ── */
+#s1-calc .btn-add {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: #e3f2fd;
+  color: var(--accent);
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+#s1-calc .btn-add:hover {
+  background: #bbdefb;
+  border-color: #0D47A1;
+}
+#s1-calc .btn-remove {
+  padding: 4px 12px;
+  background: #fff;
+  color: #c0392b;
+  border: 1px solid #e74c3c;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+#s1-calc .btn-remove:hover {
+  background: #fde8e8;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+#s1-calc .entry-#s1-calc {
+    grid-template-columns: 1fr;
+  }
+#s1-calc .entry-preview {
+    order: -1;
+  }
+#s1-calc .form-row { grid-template-columns: 1fr; }
+#s1-calc .summary-grid { grid-template-columns: 1fr 1fr; }
+#s1-calc table { font-size: 0.8rem; }
+#s1-calc thead th, #s1-calc tbody td { padding: 6px 6px; }
+}
+
+</style>
+
+  <main class="container">
+    <header>
+      <!-- Logo: replace src with your WordPress media URL -->
+      <!-- <img src="Surface-1-Logo.png" alt="Surface 1 Sport Surfacing Products" class="header-logo" /> -->
+      <h2 class="header-subtitle">Product Calculator</h2>
+      <p>Calculate Court Resurfacer, Sport Coating Base, and Color Tint Packs for your project.</p>
+    </header>
+
+    <section class="card" aria-label="Surface">
+      <h2>Step 1: Surface</h2>
+      <div class="form-row">
+        <label>
+          <span>Surface / Base Type</span>
+          <select id="surfaceType">
+            <option value="concrete">New Concrete</option>
+            <option value="asphalt">New Asphalt</option>
+            <option value="existingConcrete">Existing Concrete</option>
+            <option value="existingAsphalt">Existing Asphalt</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Court Entries">
+      <h2>Step 2: Add Courts</h2>
+      <p class="step-hint">Add court types, set dimensions, and choose zone colors.</p>
+      <div id="courtEntriesContainer"></div>
+      <button id="addCourtBtn" class="btn-add">+ Add Court</button>
+    </section>
+
+    <section class="card" aria-label="Summary">
+      <h2>Project Summary</h2>
+      <div id="summaryGrid" class="summary-grid"></div>
+    </section>
+
+    <section class="card" aria-label="Zone Areas">
+      <h2>Zone Area Breakdown</h2>
+      <table>
+        <thead>
+          <tr><th>Court</th><th>Zone</th><th>Square Feet</th><th>Square Yards</th></tr>
+        </thead>
+        <tbody id="zoneAreasBody"></tbody>
+      </table>
+    </section>
+
+    <section class="card hidden" id="crackFillerSection" aria-label="Crack Filler">
+      <h2>Crack Filler Estimates</h2>
+      <p class="disclaimer">Coverage rates may vary depending on width and depth of the cracks.</p>
+      <table>
+        <thead>
+          <tr><th>Product</th><th>Recommended Width</th><th>Material Totals</th></tr>
+        </thead>
+        <tbody id="crackBody"></tbody>
+      </table>
+    </section>
+
+    <section class="card" aria-label="Total Area Materials">
+      <h2>Total Area Materials (Resurfacer)</h2>
+      <table>
+        <thead>
+          <tr><th>Material</th><th>Coats</th><th>Gallons Needed</th><th>Material Totals</th></tr>
+        </thead>
+        <tbody id="totalAreaBody"></tbody>
+      </table>
+    </section>
+
+    <section class="card" aria-label="Zone Products">
+      <h2>Court Zone Product Options</h2>
+      <table>
+        <thead>
+          <tr><th>Material</th><th>Coats</th><th>Gallons Needed</th><th>Material Totals</th></tr>
+        </thead>
+        <tbody id="zoneProductsBody"></tbody>
+      </table>
+    </section>
+
+    <section class="card" aria-label="Striping">
+      <h2>Striping</h2>
+      <table>
+        <thead>
+          <tr><th>Material</th><th>Gallons Needed</th><th>Material Totals</th></tr>
+        </thead>
+        <tbody id="stripingBody"></tbody>
+      </table>
+    </section>
+
+  </main>
+
+<script>
+(function(){
 /* ──────────────────────────────────────────────
    Surface 1 Sport Coatings — Product Calculator
    ────────────────────────────────────────────── */
@@ -670,3 +1105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderResults();
   });
 });
+
+})();
+</script>
+</div>
