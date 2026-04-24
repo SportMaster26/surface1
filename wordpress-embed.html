@@ -116,10 +116,10 @@
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
-select,
-input[type="number"],
-input[type="text"],
-input[type="email"],
+#s1-calc select,
+#s1-calc input[type="number"],
+#s1-calc input[type="text"],
+#s1-calc input[type="email"],
 #s1-calc input[type="tel"] {
   padding: 8px 10px;
   border: 1px solid var(--border);
@@ -139,7 +139,7 @@ input[type="email"],
   cursor: default;
   opacity: 0.8;
 }
-select:focus,
+#s1-calc select:focus,
 #s1-calc input:focus {
   outline: none;
   border-color: var(--accent);
@@ -1090,7 +1090,8 @@ function renderCrackFillers(entryResults) {
 // INIT
 // ────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', () => {
+function init() {
+  if (!$('courtEntriesContainer')) return;
   courtEntries.push(createEntry('tennis'));
   renderCourtEntries();
   renderResults();
@@ -1104,7 +1105,13 @@ document.addEventListener('DOMContentLoaded', () => {
   $('surfaceType').addEventListener('change', () => {
     renderResults();
   });
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 
 })();
 </script>
