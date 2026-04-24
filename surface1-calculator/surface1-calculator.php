@@ -1,0 +1,1129 @@
+<?php
+/*
+Plugin Name: Surface 1 Product Calculator
+Plugin URI: https://sportmaster26.github.io/surface1/
+Description: Product calculator for Surface 1 Sport Coatings. Use shortcode [surface1_calculator] on any page.
+Version: 1.0
+Author: Surface 1 Sport Coatings
+License: GPL2
+*/
+
+if (!defined('ABSPATH')) exit;
+
+function surface1_calculator_shortcode() {
+    ob_start();
+    ?>
+<div id="s1-calc">
+<style>
+#s1-calc *, #s1-calc *::before, #s1-calc *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Reset & Base ── */
+
+#s1-calc {
+  --bg: #f2f2f2;
+  --card-bg: #ffffff;
+  --accent: #1565C0;
+  --accent-light: #1E88E5;
+  --accent-pale: #e3f2fd;
+  --accent-dark: #1A1A1A;
+  --text: #1A1A1A;
+  --text-muted: #555555;
+  --border: #d5d5d5;
+  --highlight: #fff9c4;
+  --radius: 8px;
+  --shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+#s1-calc {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+#s1-calc .container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+/* ── Header ── */
+#s1-calc header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+#s1-calc header h1 {
+  font-size: 1.75rem;
+  color: var(--accent-dark);
+}
+#s1-calc .header-logo {
+  max-width: 520px;
+  width: 90%;
+  height: auto;
+  margin: 0 auto 12px;
+  display: block;
+}
+#s1-calc header .header-subtitle {
+  font-size: 1.2rem;
+  color: var(--accent);
+  font-weight: 600;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 6px;
+}
+#s1-calc header p {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Cards ── */
+#s1-calc .card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+#s1-calc .card h2 {
+  font-size: 1.1rem;
+  color: var(--accent-dark);
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--accent);
+}
+#s1-calc .step-hint {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+#s1-calc .disclaimer {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+/* ── Form Layout ── */
+#s1-calc .form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+#s1-calc label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+#s1-calc label.checkbox-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  align-self: end;
+  padding-bottom: 8px;
+}
+#s1-calc label > span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+select,
+input[type="number"],
+input[type="text"],
+input[type="email"],
+#s1-calc input[type="tel"] {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 0.95rem;
+  background: #fff;
+  color: var(--text);
+  transition: border-color 0.15s;
+}
+#s1-calc input[readonly] {
+  background: #f5f5f5;
+  font-weight: 600;
+  cursor: default;
+}
+#s1-calc select:disabled {
+  background: #f5f5f5;
+  cursor: default;
+  opacity: 0.8;
+}
+select:focus,
+#s1-calc input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.15);
+}
+#s1-calc .input-highlight {
+  background: var(--highlight);
+}
+#s1-calc .hidden { display: none !important; }
+
+/* ── Summary Grid ── */
+#s1-calc .summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+#s1-calc .summary-item {
+  background: #f9f9f9;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#s1-calc .summary-item .label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+#s1-calc .summary-item .value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── Tables ── */
+#s1-calc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+#s1-calc thead th {
+  background: var(--accent-dark);
+  color: #fff;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+#s1-calc tbody td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+}
+#s1-calc tbody tr:hover {
+  background: #f7f9fb;
+}
+#s1-calc .zone-header td {
+  background: #e3f2fd;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--accent);
+}
+#s1-calc .zone-subheader td {
+  background: #f5f5f5;
+  font-weight: 600;
+  color: var(--text);
+  padding: 6px 10px 6px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.84rem;
+}
+
+/* ── Court Entry Cards ── */
+#s1-calc .court-entry-card {
+  background: #f8fafb;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+#s1-calc .entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+#s1-calc .entry-header h3 {
+  font-size: 1rem;
+  color: var(--accent-dark);
+  margin: 0;
+}
+#s1-calc .entry-#s1-calc {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 20px;
+  align-items: start;
+}
+#s1-calc .entry-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Court Preview ── */
+#s1-calc .entry-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+#s1-calc .preview-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+#s1-calc .preview-svg {
+  width: 100%;
+  max-width: 280px;
+}
+#s1-calc .court-svg {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+#s1-calc .preview-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+#s1-calc .legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+#s1-calc .legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+/* ── Buttons ── */
+#s1-calc .btn-add {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: #e3f2fd;
+  color: var(--accent);
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+#s1-calc .btn-add:hover {
+  background: #bbdefb;
+  border-color: #0D47A1;
+}
+#s1-calc .btn-remove {
+  padding: 4px 12px;
+  background: #fff;
+  color: #c0392b;
+  border: 1px solid #e74c3c;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+#s1-calc .btn-remove:hover {
+  background: #fde8e8;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+#s1-calc .entry-#s1-calc {
+    grid-template-columns: 1fr;
+  }
+#s1-calc .entry-preview {
+    order: -1;
+  }
+#s1-calc .form-row { grid-template-columns: 1fr; }
+#s1-calc .summary-grid { grid-template-columns: 1fr 1fr; }
+#s1-calc table { font-size: 0.8rem; }
+#s1-calc thead th, #s1-calc tbody td { padding: 6px 6px; }
+}
+
+</style>
+
+  <main class="container">
+    <header>
+      <!-- Logo: replace src with your WordPress media URL -->
+      <!-- <img src="Surface-1-Logo.png" alt="Surface 1 Sport Surfacing Products" class="header-logo" /> -->
+      <h2 class="header-subtitle">Product Calculator</h2>
+      <p>Calculate Court Resurfacer, Sport Coating Base, and Color Tint Packs for your project.</p>
+    </header>
+
+    <section class="card" aria-label="Surface">
+      <h2>Step 1: Surface</h2>
+      <div class="form-row">
+        <label>
+          <span>Surface / Base Type</span>
+          <select id="surfaceType">
+            <option value="concrete">New Concrete</option>
+            <option value="asphalt">New Asphalt</option>
+            <option value="existingConcrete">Existing Concrete</option>
+            <option value="existingAsphalt">Existing Asphalt</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Court Entries">
+      <h2>Step 2: Add Courts</h2>
+      <p class="step-hint">Add court types, set dimensions, and choose zone colors.</p>
+      <div id="courtEntriesContainer"></div>
+      <button id="addCourtBtn" class="btn-add">+ Add Court</button>
+    </section>
+
+    <section class="card" aria-label="Summary">
+      <h2>Project Summary</h2>
+      <div id="summaryGrid" class="summary-grid"></div>
+    </section>
+
+    <section class="card" aria-label="Zone Areas">
+      <h2>Zone Area Breakdown</h2>
+      <table>
+        <thead>
+          <tr><th>Court</th><th>Zone</th><th>Square Feet</th><th>Square Yards</th></tr>
+        </thead>
+        <tbody id="zoneAreasBody"></tbody>
+      </table>
+    </section>
+
+    <section class="card hidden" id="crackFillerSection" aria-label="Crack Filler">
+      <h2>Crack Filler Estimates</h2>
+      <p class="disclaimer">Coverage rates may vary depending on width and depth of the cracks.</p>
+      <table>
+        <thead>
+          <tr><th>Product</th><th>Recommended Width</th><th>Material Totals</th></tr>
+        </thead>
+        <tbody id="crackBody"></tbody>
+      </table>
+    </section>
+
+    <section class="card" aria-label="Total Area Materials">
+      <h2>Total Area Materials (Resurfacer)</h2>
+      <table>
+        <thead>
+          <tr><th>Material</th><th>Coats</th><th>Gallons Needed</th><th>Material Totals</th></tr>
+        </thead>
+        <tbody id="totalAreaBody"></tbody>
+      </table>
+    </section>
+
+    <section class="card" aria-label="Zone Products">
+      <h2>Court Zone Product Options</h2>
+      <table>
+        <thead>
+          <tr><th>Material</th><th>Coats</th><th>Gallons Needed</th><th>Material Totals</th></tr>
+        </thead>
+        <tbody id="zoneProductsBody"></tbody>
+      </table>
+    </section>
+
+    <section class="card" aria-label="Striping">
+      <h2>Striping</h2>
+      <table>
+        <thead>
+          <tr><th>Material</th><th>Gallons Needed</th><th>Material Totals</th></tr>
+        </thead>
+        <tbody id="stripingBody"></tbody>
+      </table>
+    </section>
+
+  </main>
+
+<script>
+(function(){
+/* ──────────────────────────────────────────────
+   Surface 1 Sport Coatings — Product Calculator
+   ────────────────────────────────────────────── */
+
+const SQFT_PER_SQYD = 9;
+
+// ── Coverage rates (sq ft per gallon) ──
+const COVERAGE = {
+  resurfacer: { concrete: 60, asphalt: 46, existingConcrete: 60, existingAsphalt: 60 },
+  base:       { concrete: 80, asphalt: 80, existingConcrete: 80, existingAsphalt: 80 }
+};
+
+// ── Color options ──
+const colorOptions = [
+  { name: 'Not Selected' },
+  { name: 'Light Blue' },
+  { name: 'Blue' },
+  { name: 'Light Green' },
+  { name: 'Dark Green' },
+  { name: 'Red' },
+  { name: 'Gray' }
+];
+
+const colorHexMap = {
+  'Not Selected': '#f0f0f0',
+  'Light Blue': '#486186',
+  'Blue': '#2D3B5B',
+  'Light Green': '#445E34',
+  'Dark Green': '#3B4133',
+  'Red': '#6B3736',
+  'Gray': '#6D6D74'
+};
+
+function getColorHex(name) {
+  return colorHexMap[name] || '#d5d5d5';
+}
+
+// ── Crack filler reference ──
+const crackFiller = { product: 'Acrylic Crack Filler', rateMin: 75, rateMax: 150, width: 'For Cracks up to 1" wide' };
+
+// ── Court type zone definitions ──
+const courtDefs = {
+  tennis: {
+    label: 'Tennis Court',
+    defaultWidth: 60, defaultLength: 120,
+    zones: [
+      { name: 'Outside Area', sqftPerCourt: null },
+      { name: 'Playing Area', sqftPerCourt: 2808 }
+    ],
+    stripingGallons: 1
+  },
+  pickleball: {
+    label: 'Pickleball Court',
+    defaultWidth: 30, defaultLength: 60,
+    zones: [
+      { name: 'Total Area', sqftPerCourt: null },
+      { name: 'Service Area', sqftPerCourt: 600 },
+      { name: 'Kitchen Area', sqftPerCourt: 280 }
+    ],
+    stripingGallons: 1
+  },
+  basketballFull: {
+    label: 'Basketball Full Court',
+    defaultWidth: 50, defaultLength: 84,
+    zones: [
+      { name: 'Court', sqftPerCourt: 4200 },
+      { name: 'Border', sqftPerCourt: null },
+      { name: 'Three Point Area', sqftPerCourt: 1224 },
+      { name: 'Key', sqftPerCourt: 456 },
+      { name: 'Free Throw Circle', sqftPerCourt: 113 },
+      { name: 'Center Court Circle', sqftPerCourt: 113 }
+    ],
+    stripingGallons: 1
+  },
+  basketballHalf: {
+    label: 'Basketball Half Court',
+    defaultWidth: 50, defaultLength: 47,
+    zones: [
+      { name: 'Court', sqftPerCourt: 2100 },
+      { name: 'Border', sqftPerCourt: null },
+      { name: 'Three Point Area', sqftPerCourt: 612 },
+      { name: 'Key', sqftPerCourt: 228 },
+      { name: 'Free Throw Circle', sqftPerCourt: 57 }
+    ],
+    stripingGallons: 1
+  },
+  totalArea: {
+    label: 'Total Area (Custom)',
+    defaultWidth: 50, defaultLength: 64,
+    zones: [
+      { name: 'Total Area', sqftPerCourt: null }
+    ],
+    stripingGallons: 0
+  }
+};
+
+// ────────────────────────────────────────────────────────
+// SVG COURT PREVIEWS
+// ────────────────────────────────────────────────────────
+
+function renderCourtPreview(courtType, zoneColors) {
+  const colors = zoneColors.map(c => getColorHex(c));
+  switch (courtType) {
+    case 'tennis': return renderTennisPreview(colors);
+    case 'pickleball': return renderPickleballPreview(colors);
+    case 'basketballFull': return renderBasketballFullPreview(colors);
+    case 'basketballHalf': return renderBasketballHalfPreview(colors);
+    default: return renderTotalAreaPreview(colors);
+  }
+}
+
+function renderTennisPreview(c) {
+  const out = c[0] || '#d5d5d5';
+  const play = c[1] || '#d5d5d5';
+  return `<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" class="court-svg">
+    <rect x="0" y="0" width="300" height="150" fill="${out}" rx="3"/>
+    <rect x="52.5" y="30" width="195" height="90" fill="${play}"/>
+    <rect x="52.5" y="30" width="195" height="90" fill="none" stroke="#fff" stroke-width="2"/>
+    <line x1="52.5" y1="41" x2="247.5" y2="41" stroke="#fff" stroke-width="1"/>
+    <line x1="52.5" y1="109" x2="247.5" y2="109" stroke="#fff" stroke-width="1"/>
+    <line x1="150" y1="27" x2="150" y2="123" stroke="#fff" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <line x1="97.5" y1="41" x2="97.5" y2="109" stroke="#fff" stroke-width="1.5"/>
+    <line x1="202.5" y1="41" x2="202.5" y2="109" stroke="#fff" stroke-width="1.5"/>
+    <line x1="97.5" y1="75" x2="202.5" y2="75" stroke="#fff" stroke-width="1.5"/>
+    <line x1="52.5" y1="75" x2="56" y2="75" stroke="#fff" stroke-width="1.5"/>
+    <line x1="244" y1="75" x2="247.5" y2="75" stroke="#fff" stroke-width="1.5"/>
+  </svg>`;
+}
+
+function renderPickleballPreview(c) {
+  const total = c[0] || '#d5d5d5';
+  const service = c[1] || '#d5d5d5';
+  const kitchen = c[2] || '#d5d5d5';
+  return `<svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" class="court-svg">
+    <rect x="0" y="0" width="300" height="160" fill="${total}" rx="3"/>
+    <rect x="30" y="25" width="82" height="110" fill="${service}"/>
+    <rect x="188" y="25" width="82" height="110" fill="${service}"/>
+    <rect x="112" y="25" width="76" height="110" fill="${kitchen}"/>
+    <rect x="30" y="25" width="240" height="110" fill="none" stroke="#fff" stroke-width="2"/>
+    <line x1="112" y1="25" x2="112" y2="135" stroke="#fff" stroke-width="1.5"/>
+    <line x1="188" y1="25" x2="188" y2="135" stroke="#fff" stroke-width="1.5"/>
+    <line x1="150" y1="25" x2="150" y2="135" stroke="#fff" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="30" y1="80" x2="112" y2="80" stroke="#fff" stroke-width="1.5"/>
+    <line x1="188" y1="80" x2="270" y2="80" stroke="#fff" stroke-width="1.5"/>
+  </svg>`;
+}
+
+function renderBasketballFullPreview(c) {
+  const court  = c[0] || '#d5d5d5';
+  const border = c[1] || '#d5d5d5';
+  const three  = c[2] || '#d5d5d5';
+  const key    = c[3] || '#d5d5d5';
+  const ft     = c[4] || '#d5d5d5';
+  const center = c[5] || '#d5d5d5';
+  return `<svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" class="court-svg">
+    <rect x="0" y="0" width="340" height="200" fill="${border}" rx="3"/>
+    <rect x="25" y="15" width="290" height="170" fill="${court}"/>
+    <rect x="25" y="15" width="290" height="170" fill="none" stroke="#fff" stroke-width="2"/>
+    <line x1="170" y1="15" x2="170" y2="185" stroke="#fff" stroke-width="1.5"/>
+    <path d="M 25,30 L 58,30 A 58,70 0 0,1 58,170 L 25,170 Z" fill="${three}" stroke="#fff" stroke-width="1.5"/>
+    <path d="M 315,30 L 282,30 A 58,70 0 0,0 282,170 L 315,170 Z" fill="${three}" stroke="#fff" stroke-width="1.5"/>
+    <rect x="25" y="62" width="55" height="76" fill="${key}" stroke="#fff" stroke-width="1.5"/>
+    <rect x="260" y="62" width="55" height="76" fill="${key}" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="80" cy="100" r="18" fill="${ft}" stroke="#fff" stroke-width="1.5"/>
+    <line x1="80" y1="62" x2="80" y2="138" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="260" cy="100" r="18" fill="${ft}" stroke="#fff" stroke-width="1.5"/>
+    <line x1="260" y1="62" x2="260" y2="138" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="170" cy="100" r="18" fill="${center}" stroke="#fff" stroke-width="1.5"/>
+    <line x1="33" y1="92" x2="33" y2="108" stroke="#fff" stroke-width="2"/>
+    <circle cx="38" cy="100" r="4" fill="none" stroke="#fff" stroke-width="1.2"/>
+    <line x1="307" y1="92" x2="307" y2="108" stroke="#fff" stroke-width="2"/>
+    <circle cx="302" cy="100" r="4" fill="none" stroke="#fff" stroke-width="1.2"/>
+  </svg>`;
+}
+
+function renderBasketballHalfPreview(c) {
+  const court  = c[0] || '#d5d5d5';
+  const border = c[1] || '#d5d5d5';
+  const three  = c[2] || '#d5d5d5';
+  const key    = c[3] || '#d5d5d5';
+  const ft     = c[4] || '#d5d5d5';
+  return `<svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" class="court-svg">
+    <rect x="0" y="0" width="220" height="200" fill="${border}" rx="3"/>
+    <rect x="15" y="15" width="190" height="170" fill="${court}"/>
+    <rect x="15" y="15" width="190" height="170" fill="none" stroke="#fff" stroke-width="2"/>
+    <path d="M 15,30 L 48,30 A 58,70 0 0,1 48,170 L 15,170 Z" fill="${three}" stroke="#fff" stroke-width="1.5"/>
+    <rect x="15" y="62" width="55" height="76" fill="${key}" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="70" cy="100" r="18" fill="${ft}" stroke="#fff" stroke-width="1.5"/>
+    <line x1="70" y1="62" x2="70" y2="138" stroke="#fff" stroke-width="1.5"/>
+    <line x1="205" y1="15" x2="205" y2="185" stroke="#fff" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="23" y1="92" x2="23" y2="108" stroke="#fff" stroke-width="2"/>
+    <circle cx="28" cy="100" r="4" fill="none" stroke="#fff" stroke-width="1.2"/>
+  </svg>`;
+}
+
+function renderTotalAreaPreview(c) {
+  const total = c[0] || '#d5d5d5';
+  return `<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg" class="court-svg">
+    <rect x="0" y="0" width="260" height="180" fill="${total}" rx="3"/>
+    <rect x="10" y="10" width="240" height="160" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="6,4"/>
+  </svg>`;
+}
+
+function renderLegend(zones, zoneColors) {
+  return zones.map((zone, i) => {
+    const colorName = zoneColors[i] || 'Not Selected';
+    const hex = getColorHex(colorName);
+    return `<span class="legend-item"><i class="legend-swatch" style="background:${hex}"></i>${zone.name}</span>`;
+  }).join('');
+}
+
+// ────────────────────────────────────────────────────────
+// CALCULATION LOGIC
+// ────────────────────────────────────────────────────────
+
+function getHiddenZoneIndices(courtType, singleCourtSqFt) {
+  const hidden = [];
+  const def = courtDefs[courtType];
+  if (courtType === 'pickleball' && singleCourtSqFt <= 880) {
+    def.zones.forEach((z, i) => { if (z.name === 'Total Area') hidden.push(i); });
+  }
+  if (courtType === 'tennis' && singleCourtSqFt <= 2808) {
+    def.zones.forEach((z, i) => { if (z.name === 'Outside Area') hidden.push(i); });
+  }
+  return hidden;
+}
+
+function computeZoneAreas(courtType, totalSqFt, numCourts, singleCourtSqFt) {
+  const def = courtDefs[courtType];
+  const hidden = getHiddenZoneIndices(courtType, singleCourtSqFt || (totalSqFt / (numCourts || 1)));
+  const zones = [];
+  for (let i = 0; i < def.zones.length; i++) {
+    if (hidden.includes(i)) continue;
+    const zone = def.zones[i];
+    let areaSqFt;
+    if (zone.sqftPerCourt !== null) {
+      areaSqFt = Math.ceil(zone.sqftPerCourt * numCourts);
+    } else {
+      if (courtType === 'tennis') {
+        areaSqFt = Math.max(0, totalSqFt - 2808 * numCourts);
+      } else if (courtType === 'basketballFull') {
+        areaSqFt = Math.max(0, totalSqFt - 4200 * numCourts);
+      } else if (courtType === 'basketballHalf') {
+        areaSqFt = Math.max(0, totalSqFt - 2100 * numCourts);
+      } else {
+        areaSqFt = totalSqFt;
+      }
+    }
+    zones.push({ name: zone.name, sqft: areaSqFt, sqyd: areaSqFt / SQFT_PER_SQYD, zoneIndex: i });
+  }
+  return zones;
+}
+
+function getEntrySqFt(entry) {
+  if (entry.areaInputMode === 'wxl') {
+    return entry.width * entry.length;
+  } else {
+    return entry.areaValue;
+  }
+}
+
+function calculateEntry(entry, surfaceType) {
+  const totalSqFt = getEntrySqFt(entry);
+  const singleCourtSqFt = totalSqFt / (entry.numCourts || 1);
+  const zoneAreas = computeZoneAreas(entry.courtType, totalSqFt, entry.numCourts, singleCourtSqFt);
+
+  // Patch Binder: concrete surfaces only
+  const needsPatchBinder = surfaceType === 'concrete' || surfaceType === 'existingConcrete';
+  const patchBinderGallons = needsPatchBinder ? Math.ceil(totalSqFt / 300) : 0;
+
+  // Resurfacer: total area
+  const resurfacerRate = COVERAGE.resurfacer[surfaceType] || 60;
+  const resurfacerCoats = (surfaceType === 'asphalt' || surfaceType === 'existingAsphalt') ? 2 : 1;
+  const resurfacerGallons = Math.ceil((totalSqFt / resurfacerRate) * resurfacerCoats);
+
+  // Sport Coating Base per zone
+  const baseRate = COVERAGE.base[surfaceType] || 80;
+  const baseCoats = 2;
+  const zones = [];
+  const colorTotals = {};
+
+  zoneAreas.forEach(zone => {
+    const colorName = entry.zoneColors[zone.zoneIndex] || 'Not Selected';
+    const gallons = Math.ceil((zone.sqft / baseRate) * baseCoats);
+    zones.push({
+      name: zone.name,
+      sqft: zone.sqft,
+      colorName,
+      baseGallons: gallons,
+      baseCoats
+    });
+    if (colorName !== 'Not Selected') {
+      if (!colorTotals[colorName]) colorTotals[colorName] = { area: 0, packs: 0 };
+      colorTotals[colorName].area += zone.sqft;
+      colorTotals[colorName].packs += Math.ceil(gallons / 5);
+    }
+  });
+
+  // Striping
+  const def = courtDefs[entry.courtType];
+  const stripingGallons = def.stripingGallons > 0
+    ? Math.ceil(entry.numCourts * def.stripingGallons / 2)
+    : 0;
+
+  return {
+    label: def.label,
+    courtType: entry.courtType,
+    numCourts: entry.numCourts,
+    totalSqFt,
+    patchBinderGallons,
+    needsPatchBinder,
+    resurfacerGallons,
+    resurfacerCoats,
+    zones,
+    colorTotals,
+    stripingGallons,
+    zoneAreas
+  };
+}
+
+// ────────────────────────────────────────────────────────
+// UI STATE & RENDERING
+// ────────────────────────────────────────────────────────
+
+const $ = id => document.getElementById(id);
+
+let courtEntries = [];
+let nextEntryId = 1;
+
+function fmt(n) {
+  if (typeof n !== 'number' || isNaN(n)) return n;
+  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(n);
+}
+
+function createEntry(courtType) {
+  courtType = courtType || 'tennis';
+  const def = courtDefs[courtType];
+  return {
+    id: nextEntryId++,
+    courtType,
+    numCourts: 1,
+    areaInputMode: 'wxl',
+    width: def.defaultWidth,
+    length: def.defaultLength,
+    areaValue: def.defaultWidth * def.defaultLength,
+    crackFiller: false,
+    crackLinearFeet: 0,
+    zoneColors: def.zones.map((z, i) => i === 0 ? 'Light Blue' : 'Blue')
+  };
+}
+
+function readEntryFromDOM(entry) {
+  const el = document.querySelector(`[data-entry-id="${entry.id}"]`);
+  if (!el) return entry;
+  entry.courtType = el.querySelector('.entry-court-type').value;
+  entry.numCourts = Math.max(1, parseInt(el.querySelector('.entry-num-courts').value, 10) || 1);
+  entry.areaInputMode = el.querySelector('.entry-area-mode').value;
+  if (entry.areaInputMode === 'wxl') {
+    entry.width = parseFloat(el.querySelector('.entry-width').value) || 0;
+    entry.length = parseFloat(el.querySelector('.entry-length').value) || 0;
+  } else {
+    entry.areaValue = parseFloat(el.querySelector('.entry-area-value').value) || 0;
+  }
+  entry.crackFiller = el.querySelector('.entry-crack-filler').checked;
+  entry.crackLinearFeet = parseFloat(el.querySelector('.entry-crack-feet').value) || 0;
+  const colorSels = el.querySelectorAll('.entry-zone-color');
+  colorSels.forEach(s => {
+    const zi = parseInt(s.dataset.zone, 10);
+    entry.zoneColors[zi] = s.value;
+  });
+  return entry;
+}
+
+function buildColorOptions(selectedValue) {
+  return colorOptions.map(c =>
+    `<option value="${c.name}"${c.name === selectedValue ? ' selected' : ''}>${c.name}</option>`
+  ).join('');
+}
+
+function buildCourtTypeOptions(selectedValue) {
+  return Object.entries(courtDefs).map(([key, def]) =>
+    `<option value="${key}"${key === selectedValue ? ' selected' : ''}>${def.label}</option>`
+  ).join('');
+}
+
+// ── Render court entry cards ──
+function renderCourtEntries() {
+  courtEntries.forEach(e => readEntryFromDOM(e));
+  const container = $('courtEntriesContainer');
+  container.innerHTML = '';
+
+  courtEntries.forEach(entry => {
+    const def = courtDefs[entry.courtType];
+    const card = document.createElement('div');
+    card.className = 'court-entry-card';
+    card.dataset.entryId = entry.id;
+
+    const showCourtsField = entry.courtType !== 'totalArea';
+    const entrySqFt = getEntrySqFt(entry);
+    const singleCourtSqFt = entrySqFt / (entry.numCourts || 1);
+    const hiddenZones = getHiddenZoneIndices(entry.courtType, singleCourtSqFt);
+
+    const zoneColorsHtml = def.zones.map((zone, i) => {
+      const isHidden = hiddenZones.includes(i);
+      const val = isHidden ? 'Not Selected' : (entry.zoneColors[i] || 'Not Selected');
+      return `<label class="zone-color-label" data-zone-label="${i}" ${isHidden ? 'style="display:none"' : ''}>
+        <span>${zone.name} Color</span>
+        <select class="entry-zone-color" data-zone="${i}">${buildColorOptions(val)}</select>
+      </label>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="entry-header">
+        <h3>${def.label}</h3>
+        ${courtEntries.length > 1 ? `<button class="btn-remove" data-remove="${entry.id}">Remove</button>` : ''}
+      </div>
+      <div class="entry-body">
+        <div class="entry-fields">
+          <div class="form-row">
+            <label>
+              <span>Court Type</span>
+              <select class="entry-court-type">${buildCourtTypeOptions(entry.courtType)}</select>
+            </label>
+            <label ${showCourtsField ? '' : 'class="hidden"'}>
+              <span>Number of Courts</span>
+              <input class="entry-num-courts input-highlight" type="number" min="1" step="1" value="${entry.numCourts}" />
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" class="entry-crack-filler"${entry.crackFiller ? ' checked' : ''}>
+              <span>Crack Filler</span>
+            </label>
+          </div>
+          <div class="form-row entry-crack-section${entry.crackFiller ? '' : ' hidden'}">
+            <label>
+              <span>Linear Feet of Cracks</span>
+              <input class="entry-crack-feet" type="number" min="0" step="1" value="${entry.crackLinearFeet}" />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              <span>Area Input</span>
+              <select class="entry-area-mode">
+                <option value="wxl"${entry.areaInputMode === 'wxl' ? ' selected' : ''}>Width x Length (ft)</option>
+                <option value="sqft"${entry.areaInputMode === 'sqft' ? ' selected' : ''}>Square Feet</option>
+              </select>
+            </label>
+            <label class="entry-wxl-field${entry.areaInputMode !== 'wxl' ? ' hidden' : ''}">
+              <span>Width (Feet)</span>
+              <input class="entry-width input-highlight" type="number" min="0" step="0.1" value="${entry.width}" />
+            </label>
+            <label class="entry-wxl-field${entry.areaInputMode !== 'wxl' ? ' hidden' : ''}">
+              <span>Length (Feet)</span>
+              <input class="entry-length input-highlight" type="number" min="0" step="0.1" value="${entry.length}" />
+            </label>
+            <label class="entry-direct-field${entry.areaInputMode === 'wxl' ? ' hidden' : ''}">
+              <span>Square Feet</span>
+              <input class="entry-area-value input-highlight" type="number" min="0" step="0.1" value="${entry.areaValue}" />
+            </label>
+          </div>
+          <div class="form-row">${zoneColorsHtml}</div>
+        </div>
+        <div class="entry-preview">
+          <div class="preview-label">Color Preview</div>
+          <div class="preview-svg">${renderCourtPreview(entry.courtType, entry.zoneColors)}</div>
+          <div class="preview-legend">${renderLegend(def.zones, entry.zoneColors)}</div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+
+    // Event: court type change
+    card.querySelector('.entry-court-type').addEventListener('change', (e) => {
+      const newType = e.target.value;
+      const newDef = courtDefs[newType];
+      entry.courtType = newType;
+      entry.width = newDef.defaultWidth;
+      entry.length = newDef.defaultLength;
+      entry.areaValue = newDef.defaultWidth * newDef.defaultLength;
+      entry.numCourts = newType === 'totalArea' ? 1 : entry.numCourts;
+      entry.zoneColors = newDef.zones.map((z, i) => i === 0 ? 'Light Blue' : 'Blue');
+      renderCourtEntries();
+      renderResults();
+    });
+
+    // Event: generic field changes
+    const onFieldChange = () => {
+      readEntryFromDOM(entry);
+      const previewDiv = card.querySelector('.preview-svg');
+      const legendDiv = card.querySelector('.preview-legend');
+      const currentDef = courtDefs[entry.courtType];
+      previewDiv.innerHTML = renderCourtPreview(entry.courtType, entry.zoneColors);
+      legendDiv.innerHTML = renderLegend(currentDef.zones, entry.zoneColors);
+      renderResults();
+    };
+
+    card.querySelectorAll('input, select').forEach(el => {
+      if (!el.classList.contains('entry-court-type') && !el.classList.contains('entry-area-mode')) {
+        el.addEventListener('input', onFieldChange);
+        el.addEventListener('change', onFieldChange);
+      }
+    });
+
+    // Event: area input mode change
+    card.querySelector('.entry-area-mode').addEventListener('change', () => {
+      entry.areaInputMode = card.querySelector('.entry-area-mode').value;
+      const currentSqFt = getEntrySqFt(entry);
+      if (entry.areaInputMode === 'wxl') {
+        if (!entry.width || !entry.length) {
+          entry.width = Math.round(Math.sqrt(currentSqFt));
+          entry.length = entry.width > 0 ? Math.round(currentSqFt / entry.width) : 0;
+        }
+      } else {
+        entry.areaValue = Math.round(currentSqFt * 100) / 100;
+      }
+      renderCourtEntries();
+      renderResults();
+    });
+
+    // Event: crack filler checkbox
+    card.querySelector('.entry-crack-filler').addEventListener('change', () => {
+      card.querySelector('.entry-crack-section').classList.toggle('hidden', !entry.crackFiller);
+      renderResults();
+    });
+
+    // Event: remove button
+    const removeBtn = card.querySelector('.btn-remove');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        courtEntries = courtEntries.filter(e => e.id !== entry.id);
+        renderCourtEntries();
+        renderResults();
+      });
+    }
+  });
+}
+
+// ── Render calculation results ──
+function renderResults() {
+  const surfaceType = $('surfaceType').value;
+
+  const entryResults = courtEntries.map(entry => {
+    readEntryFromDOM(entry);
+    return calculateEntry(entry, surfaceType);
+  });
+
+  const totalCombinedSqFt = entryResults.reduce((sum, r) => sum + r.totalSqFt, 0);
+  const totalCombinedSqYd = totalCombinedSqFt / SQFT_PER_SQYD;
+
+  // Summary
+  const courtSummary = courtEntries.map(e => {
+    const def = courtDefs[e.courtType];
+    return e.numCourts + ' ' + def.label + (e.numCourts > 1 ? 's' : '');
+  }).join(', ');
+
+  $('summaryGrid').innerHTML = `
+    <article class="summary-item"><span class="label">Courts</span><span class="value">${courtSummary}</span></article>
+    <article class="summary-item"><span class="label">Total Area (sq ft)</span><span class="value">${fmt(totalCombinedSqFt)}</span></article>
+    <article class="summary-item"><span class="label">Total Area (sq yd)</span><span class="value">${fmt(totalCombinedSqYd)}</span></article>
+  `;
+
+  // Zone area breakdown
+  let zoneAreaHtml = '';
+  entryResults.forEach((r, ri) => {
+    const courtLabel = entryResults.length > 1 ? (r.label + ' (Court ' + (ri + 1) + ')') : r.label;
+    r.zoneAreas.forEach(z => {
+      zoneAreaHtml += `<tr><td>${courtLabel}</td><td>${z.name}</td><td>${fmt(z.sqft)}</td><td>${fmt(z.sqyd)}</td></tr>`;
+    });
+  });
+  $('zoneAreasBody').innerHTML = zoneAreaHtml || '<tr><td colspan="4">Add courts above</td></tr>';
+
+  // Total area materials (resurfacer)
+  let totalAreaHtml = '';
+  entryResults.forEach((r, ri) => {
+    const courtLabel = entryResults.length > 1 ? (r.label + ' (Court ' + (ri + 1) + ')') : r.label;
+    if (entryResults.length > 1) {
+      totalAreaHtml += `<tr class="zone-header"><td colspan="4">${courtLabel}</td></tr>`;
+    }
+    if (r.needsPatchBinder) {
+      const patchPails = Math.ceil(r.patchBinderGallons / 5);
+      totalAreaHtml += `<tr><td>Patch Binder</td><td>1</td><td>${r.patchBinderGallons}</td><td>${patchPails} - 5-Gallon Pail(s)</td></tr>`;
+    }
+    const resurfacerPails = Math.ceil(r.resurfacerGallons / 5);
+    totalAreaHtml += `<tr><td>Court Resurfacer</td><td>${r.resurfacerCoats}</td><td>${r.resurfacerGallons}</td><td>${resurfacerPails} - 5-Gallon Pail(s)</td></tr>`;
+  });
+  $('totalAreaBody').innerHTML = totalAreaHtml;
+
+  // Zone products (base + tint per zone)
+  let zoneHtml = '';
+  entryResults.forEach((r, ri) => {
+    const courtLabel = entryResults.length > 1
+      ? (r.label + ' (Court ' + (ri + 1) + ') — ' + r.numCourts + ' court' + (r.numCourts > 1 ? 's' : '') + ' — ' + fmt(r.totalSqFt) + ' sq ft')
+      : (r.label + ' (' + r.numCourts + ') — ' + fmt(r.totalSqFt) + ' sq ft');
+    zoneHtml += `<tr class="zone-header"><td colspan="4">${courtLabel}</td></tr>`;
+    r.zones.forEach(zone => {
+      const zoneColorHex = getColorHex(zone.colorName || 'Not Selected');
+      const zoneColorLabel = zone.colorName && zone.colorName !== 'Not Selected' ? ' — ' + zone.colorName : '';
+      zoneHtml += `<tr class="zone-subheader"><td colspan="4"><span class="legend-swatch" style="background:${zoneColorHex};vertical-align:middle;margin-right:6px"></span>${zone.name} (${fmt(zone.sqft)} sq ft)${zoneColorLabel}</td></tr>`;
+      const basePails = Math.ceil(zone.baseGallons / 5);
+      zoneHtml += `<tr><td>Sport Coating Base</td><td>${zone.baseCoats}</td><td>${zone.baseGallons}</td><td>${basePails} - 5-Gallon Pail(s)</td></tr>`;
+      if (zone.colorName !== 'Not Selected') {
+        zoneHtml += `<tr><td>${zone.colorName} Tint Pack</td><td></td><td></td><td>${basePails} ${zone.colorName} Tint Pack(s)</td></tr>`;
+      }
+    });
+  });
+  $('zoneProductsBody').innerHTML = zoneHtml || '<tr><td colspan="4">No zone products</td></tr>';
+
+  // Striping
+  let stripingHtml = '';
+  let anyStriping = false;
+  entryResults.forEach((r, ri) => {
+    if (r.stripingGallons <= 0) return;
+    anyStriping = true;
+    const courtLabel = entryResults.length > 1 ? (r.label + ' (Court ' + (ri + 1) + ')') : r.label;
+    if (entryResults.length > 1) {
+      stripingHtml += `<tr class="zone-header"><td colspan="3">${courtLabel}</td></tr>`;
+    }
+    stripingHtml += `<tr><td>Line Primer</td><td>${r.stripingGallons}</td><td>${r.stripingGallons} - 1 Gallon Jug(s)</td></tr>`;
+    stripingHtml += `<tr><td>White Line Paint</td><td>${r.stripingGallons}</td><td>${r.stripingGallons} - 1 Gallon Jug(s)</td></tr>`;
+  });
+  $('stripingBody').innerHTML = anyStriping ? stripingHtml : '<tr><td colspan="3">N/A for this court type</td></tr>';
+
+  // Crack filler estimates
+  renderCrackFillers(entryResults);
+}
+
+function renderCrackFillers(entryResults) {
+  const crackEntries = entryResults.filter((r, ri) => courtEntries[ri].crackFiller && courtEntries[ri].crackLinearFeet > 0);
+  const anyCrack = crackEntries.length > 0;
+  $('crackFillerSection').classList.toggle('hidden', !anyCrack);
+  if (!anyCrack) { $('crackBody').innerHTML = ''; return; }
+
+  let html = '';
+  crackEntries.forEach((r, ri) => {
+    const entry = courtEntries.find(e => {
+      const res = calculateEntry(e, $('surfaceType').value);
+      return res.label === r.label;
+    }) || courtEntries[ri];
+    const gallonsMin = Math.ceil(entry.crackLinearFeet / crackFiller.rateMax);
+    const gallonsMax = Math.ceil(entry.crackLinearFeet / crackFiller.rateMin);
+    const gallonsLabel = gallonsMin === gallonsMax ? gallonsMin : gallonsMin + ' - ' + gallonsMax;
+    const pailsMin = Math.ceil(gallonsMin / 5);
+    const pailsMax = Math.ceil(gallonsMax / 5);
+    const pailsLabel = pailsMin === pailsMax ? pailsMin : pailsMin + ' - ' + pailsMax;
+    html += `<tr>
+      <td>${crackFiller.product}</td>
+      <td>${crackFiller.width}</td>
+      <td>${gallonsLabel} - 1-Gallon Pail(s)</td>
+    </tr>`;
+  });
+  $('crackBody').innerHTML = html;
+}
+
+// ────────────────────────────────────────────────────────
+// INIT
+// ────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  courtEntries.push(createEntry('tennis'));
+  renderCourtEntries();
+  renderResults();
+
+  $('addCourtBtn').addEventListener('click', () => {
+    courtEntries.push(createEntry('tennis'));
+    renderCourtEntries();
+    renderResults();
+  });
+
+  $('surfaceType').addEventListener('change', () => {
+    renderResults();
+  });
+});
+
+})();
+</script>
+</div><?php
+    return ob_get_clean();
+}
+add_shortcode('surface1_calculator', 'surface1_calculator_shortcode');
