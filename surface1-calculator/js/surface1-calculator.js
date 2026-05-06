@@ -102,20 +102,21 @@ const courtDefs = {
 // SVG COURT PREVIEWS
 // ────────────────────────────────────────────────────────
 
-function renderCourtPreview(courtType, zoneColors) {
+function renderCourtPreview(courtType, zoneColors, hiddenZones) {
   const colors = zoneColors.map(c => getColorHex(c));
+  hiddenZones = hiddenZones || [];
   switch (courtType) {
-    case 'tennis': return renderTennisPreview(colors);
-    case 'pickleball': return renderPickleballPreview(colors);
-    case 'basketballFull': return renderBasketballFullPreview(colors);
-    case 'basketballHalf': return renderBasketballHalfPreview(colors);
+    case 'tennis': return renderTennisPreview(colors, hiddenZones);
+    case 'pickleball': return renderPickleballPreview(colors, hiddenZones);
+    case 'basketballFull': return renderBasketballFullPreview(colors, hiddenZones);
+    case 'basketballHalf': return renderBasketballHalfPreview(colors, hiddenZones);
     default: return renderTotalAreaPreview(colors);
   }
 }
 
-function renderTennisPreview(c) {
-  const out = c[0] || '#d5d5d5';
+function renderTennisPreview(c, hiddenZones) {
   const play = c[1] || '#d5d5d5';
+  const out = hiddenZones.includes(0) ? play : (c[0] || '#d5d5d5');
   return `<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" class="court-svg">
     <rect x="0" y="0" width="300" height="150" fill="${out}" rx="3"/>
     <rect x="52.5" y="30" width="195" height="90" fill="${play}"/>
@@ -131,10 +132,10 @@ function renderTennisPreview(c) {
   </svg>`;
 }
 
-function renderPickleballPreview(c) {
-  const total = c[0] || '#d5d5d5';
+function renderPickleballPreview(c, hiddenZones) {
   const service = c[1] || '#d5d5d5';
   const kitchen = c[2] || '#d5d5d5';
+  const total = hiddenZones.includes(0) ? service : (c[0] || '#d5d5d5');
   return `<svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" class="court-svg">
     <rect x="0" y="0" width="300" height="160" fill="${total}" rx="3"/>
     <rect x="30" y="25" width="82" height="110" fill="${service}"/>
@@ -149,9 +150,9 @@ function renderPickleballPreview(c) {
   </svg>`;
 }
 
-function renderBasketballFullPreview(c) {
+function renderBasketballFullPreview(c, hiddenZones) {
   const court  = c[0] || '#d5d5d5';
-  const border = c[1] || '#d5d5d5';
+  const border = hiddenZones.includes(1) ? court : (c[1] || '#d5d5d5');
   const three  = c[2] || '#d5d5d5';
   const key    = c[3] || '#d5d5d5';
   const ft     = c[4] || '#d5d5d5';
@@ -177,9 +178,9 @@ function renderBasketballFullPreview(c) {
   </svg>`;
 }
 
-function renderBasketballHalfPreview(c) {
+function renderBasketballHalfPreview(c, hiddenZones) {
   const court  = c[0] || '#d5d5d5';
-  const border = c[1] || '#d5d5d5';
+  const border = hiddenZones.includes(1) ? court : (c[1] || '#d5d5d5');
   const three  = c[2] || '#d5d5d5';
   const key    = c[3] || '#d5d5d5';
   const ft     = c[4] || '#d5d5d5';
@@ -205,8 +206,10 @@ function renderTotalAreaPreview(c) {
   </svg>`;
 }
 
-function renderLegend(zones, zoneColors) {
+function renderLegend(zones, zoneColors, hiddenZones) {
+  hiddenZones = hiddenZones || [];
   return zones.map((zone, i) => {
+    if (hiddenZones.includes(i)) return '';
     const colorName = zoneColors[i] || 'Not Selected';
     const hex = getColorHex(colorName);
     return `<span class="legend-item"><i class="legend-swatch" style="background:${hex}"></i>${zone.name}</span>`;
@@ -225,6 +228,12 @@ function getHiddenZoneIndices(courtType, singleCourtSqFt) {
   }
   if (courtType === 'tennis' && singleCourtSqFt <= 2808) {
     def.zones.forEach((z, i) => { if (z.name === 'Outside Area') hidden.push(i); });
+  }
+  if (courtType === 'basketballFull' && singleCourtSqFt <= 4200) {
+    def.zones.forEach((z, i) => { if (z.name === 'Border') hidden.push(i); });
+  }
+  if (courtType === 'basketballHalf' && singleCourtSqFt <= 2100) {
+    def.zones.forEach((z, i) => { if (z.name === 'Border') hidden.push(i); });
   }
   return hidden;
 }
@@ -256,13 +265,11 @@ function computeZoneAreas(courtType, totalSqFt, numCourts, singleCourtSqFt) {
 }
 
 function getEntrySqFt(entry) {
-  let singleCourtSqFt = 0;
   if (entry.areaInputMode === 'wxl') {
-    singleCourtSqFt = entry.width * entry.length;
+    return entry.width * entry.length;
   } else {
-    singleCourtSqFt = entry.areaValue;
+    return entry.areaValue;
   }
-  return singleCourtSqFt * (entry.numCourts || 1);
 }
 
 function calculateEntry(entry, surfaceType) {
@@ -407,6 +414,9 @@ function renderCourtEntries() {
     const singleCourtSqFt = entrySqFt / (entry.numCourts || 1);
     const hiddenZones = getHiddenZoneIndices(entry.courtType, singleCourtSqFt);
 
+    // Build effective zone colors: hidden zones get 'Not Selected'
+    const effectiveZoneColors = entry.zoneColors.map((c, i) => hiddenZones.includes(i) ? 'Not Selected' : c);
+
     const zoneColorsHtml = def.zones.map((zone, i) => {
       const isHidden = hiddenZones.includes(i);
       const val = isHidden ? 'Not Selected' : (entry.zoneColors[i] || 'Not Selected');
@@ -468,8 +478,8 @@ function renderCourtEntries() {
         </div>
         <div class="entry-preview">
           <div class="preview-label">Color Preview</div>
-          <div class="preview-svg">${renderCourtPreview(entry.courtType, entry.zoneColors)}</div>
-          <div class="preview-legend">${renderLegend(def.zones, entry.zoneColors)}</div>
+          <div class="preview-svg">${renderCourtPreview(entry.courtType, effectiveZoneColors, hiddenZones)}</div>
+          <div class="preview-legend">${renderLegend(def.zones, effectiveZoneColors, hiddenZones)}</div>
         </div>
       </div>
     `;
@@ -493,11 +503,26 @@ function renderCourtEntries() {
     // Event: generic field changes
     const onFieldChange = () => {
       readEntryFromDOM(entry);
+      const currentDef = courtDefs[entry.courtType];
+      const currentSqFt = getEntrySqFt(entry);
+      const currentSingleSqFt = currentSqFt / (entry.numCourts || 1);
+      const currentHidden = getHiddenZoneIndices(entry.courtType, currentSingleSqFt);
+      const currentEffective = entry.zoneColors.map((c, i) => currentHidden.includes(i) ? 'Not Selected' : c);
+
+      // Update zone color selector visibility
+      card.querySelectorAll('.zone-color-label').forEach(label => {
+        const zoneIdx = parseInt(label.dataset.zoneLabel);
+        const shouldHide = currentHidden.includes(zoneIdx);
+        label.style.display = shouldHide ? 'none' : '';
+        if (shouldHide) {
+          label.querySelector('select').value = 'Not Selected';
+        }
+      });
+
       const previewDiv = card.querySelector('.preview-svg');
       const legendDiv = card.querySelector('.preview-legend');
-      const currentDef = courtDefs[entry.courtType];
-      previewDiv.innerHTML = renderCourtPreview(entry.courtType, entry.zoneColors);
-      legendDiv.innerHTML = renderLegend(currentDef.zones, entry.zoneColors);
+      previewDiv.innerHTML = renderCourtPreview(entry.courtType, currentEffective, currentHidden);
+      legendDiv.innerHTML = renderLegend(currentDef.zones, currentEffective, currentHidden);
       renderResults();
     };
 
