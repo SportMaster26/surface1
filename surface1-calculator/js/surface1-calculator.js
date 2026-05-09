@@ -220,11 +220,14 @@ function renderLegend(zones, zoneColors) {
 function getHiddenZoneIndices(courtType, singleCourtSqFt) {
   const hidden = [];
   const def = courtDefs[courtType];
-  if (courtType === 'pickleball' && singleCourtSqFt <= 880) {
-    def.zones.forEach((z, i) => { if (z.name === 'Total Area') hidden.push(i); });
-  }
-  if (courtType === 'tennis' && singleCourtSqFt <= 2808) {
-    def.zones.forEach((z, i) => { if (z.name === 'Outside Area') hidden.push(i); });
+  // Only hide zones when user has entered actual dimensions (sqft > 0)
+  if (singleCourtSqFt > 0) {
+    if (courtType === 'pickleball' && singleCourtSqFt <= 880) {
+      def.zones.forEach((z, i) => { if (z.name === 'Total Area') hidden.push(i); });
+    }
+    if (courtType === 'tennis' && singleCourtSqFt <= 2808) {
+      def.zones.forEach((z, i) => { if (z.name === 'Outside Area') hidden.push(i); });
+    }
   }
   return hidden;
 }
@@ -347,9 +350,9 @@ function createEntry(courtType) {
     courtType,
     numCourts: 1,
     areaInputMode: 'wxl',
-    width: def.defaultWidth,
-    length: def.defaultLength,
-    areaValue: def.defaultWidth * def.defaultLength,
+    width: '',
+    length: '',
+    areaValue: '',
     crackFiller: false,
     crackLinearFeet: 0,
     zoneColors: def.zones.map((z, i) => i === 0 ? 'Light Blue' : 'Blue')
@@ -453,15 +456,15 @@ function renderCourtEntries() {
             </label>
             <label class="entry-wxl-field${entry.areaInputMode !== 'wxl' ? ' hidden' : ''}">
               <span>Width (Feet)</span>
-              <input class="entry-width input-highlight" type="number" min="0" step="0.1" value="${entry.width}" />
+              <input class="entry-width input-highlight" type="number" min="0" step="0.1" value="${entry.width}" placeholder="Enter Width Here" />
             </label>
             <label class="entry-wxl-field${entry.areaInputMode !== 'wxl' ? ' hidden' : ''}">
               <span>Length (Feet)</span>
-              <input class="entry-length input-highlight" type="number" min="0" step="0.1" value="${entry.length}" />
+              <input class="entry-length input-highlight" type="number" min="0" step="0.1" value="${entry.length}" placeholder="Enter Length Here" />
             </label>
             <label class="entry-direct-field${entry.areaInputMode === 'wxl' ? ' hidden' : ''}">
               <span>Square Feet</span>
-              <input class="entry-area-value input-highlight" type="number" min="0" step="0.1" value="${entry.areaValue}" />
+              <input class="entry-area-value input-highlight" type="number" min="0" step="0.1" value="${entry.areaValue}" placeholder="Enter Sq. Ft. Here" />
             </label>
           </div>
           <div class="form-row">${zoneColorsHtml}</div>
@@ -481,9 +484,9 @@ function renderCourtEntries() {
       const newType = e.target.value;
       const newDef = courtDefs[newType];
       entry.courtType = newType;
-      entry.width = newDef.defaultWidth;
-      entry.length = newDef.defaultLength;
-      entry.areaValue = newDef.defaultWidth * newDef.defaultLength;
+      entry.width = '';
+      entry.length = '';
+      entry.areaValue = '';
       entry.numCourts = newType === 'totalArea' ? 1 : entry.numCourts;
       entry.zoneColors = newDef.zones.map((z, i) => i === 0 ? 'Light Blue' : 'Blue');
       renderCourtEntries();
@@ -493,9 +496,27 @@ function renderCourtEntries() {
     // Event: generic field changes
     const onFieldChange = () => {
       readEntryFromDOM(entry);
+      const currentDef = courtDefs[entry.courtType];
+      const entrySqFt = getEntrySqFt(entry);
+      const singleSqFt = entrySqFt / (entry.numCourts || 1);
+      const hiddenZones = getHiddenZoneIndices(entry.courtType, singleSqFt);
+
+      // Live-update zone color visibility based on current dimensions
+      currentDef.zones.forEach((zone, i) => {
+        const label = card.querySelector(`[data-zone-label="${i}"]`);
+        if (label) {
+          const shouldHide = hiddenZones.includes(i);
+          label.style.display = shouldHide ? 'none' : '';
+          if (shouldHide) {
+            const sel = label.querySelector('.entry-zone-color');
+            if (sel) sel.value = 'Not Selected';
+            entry.zoneColors[i] = 'Not Selected';
+          }
+        }
+      });
+
       const previewDiv = card.querySelector('.preview-svg');
       const legendDiv = card.querySelector('.preview-legend');
-      const currentDef = courtDefs[entry.courtType];
       previewDiv.innerHTML = renderCourtPreview(entry.courtType, entry.zoneColors);
       legendDiv.innerHTML = renderLegend(currentDef.zones, entry.zoneColors);
       renderResults();
@@ -666,7 +687,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Only initialize if our plugin container exists on this page
   if (!document.getElementById('s1calc-app')) return;
 
-  courtEntries.push(createEntry('tennis'));
   renderCourtEntries();
   renderResults();
 

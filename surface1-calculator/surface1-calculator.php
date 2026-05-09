@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Surface 1 Product Calculator
  * Description: Sport court resurfacing product calculator. Use shortcode [surface1_calculator] on any page.
- * Version: 1.0.0
+ * Version: 1.4.0
  * Author: Surface 1
  */
 
@@ -17,13 +17,13 @@ function s1calc_enqueue_assets() {
         's1calc-styles',
         plugin_dir_url(__FILE__) . 'css/surface1-calculator.css',
         array(),
-        '1.0.0'
+        '1.5.0'
     );
     wp_enqueue_script(
         's1calc-script',
         plugin_dir_url(__FILE__) . 'js/surface1-calculator.js',
         array(),
-        '1.0.0',
+        '1.5.0',
         true
     );
 }
@@ -35,12 +35,6 @@ function s1calc_shortcode($atts) {
     ?>
     <div id="s1calc-app" class="s1calc">
       <div class="s1calc-container">
-        <header>
-          <img src="<?php echo $plugin_url; ?>images/Surface 1 Logo.png" alt="Surface 1 Sport Surfacing Products" class="header-logo" />
-          <h2 class="header-subtitle">Product Calculator</h2>
-          <p>Calculate Court Resurfacer, Sport Coating Base, and Color Tint Packs for your project.</p>
-        </header>
-
         <!-- Step 1: Surface -->
         <section class="card" aria-label="Surface">
           <h2>Step 1: Surface</h2>
@@ -74,9 +68,10 @@ function s1calc_shortcode($atts) {
         <!-- Zone Area Breakdown -->
         <section class="card" aria-label="Zone Areas">
           <h2>Zone Area Breakdown</h2>
-          <table>
+          <table class="s1calc-tbl-4col">
+            <colgroup><col style="width:28%"><col style="width:28%"><col style="width:22%"><col style="width:22%"></colgroup>
             <thead>
-              <tr><th>Court</th><th>Zone</th><th>Square Feet</th><th>Square Yards</th></tr>
+              <tr><th>Court</th><th>Zone</th><th>Sq Ft</th><th>Sq Yd</th></tr>
             </thead>
             <tbody id="s1calc-zoneAreasBody"></tbody>
           </table>
@@ -86,9 +81,10 @@ function s1calc_shortcode($atts) {
         <section class="card hidden" id="s1calc-crackFillerSection" aria-label="Crack Filler">
           <h2>Crack Filler Estimates</h2>
           <p class="disclaimer">Coverage rates may vary depending on width and depth of the cracks.</p>
-          <table>
+          <table class="s1calc-tbl-3col">
+            <colgroup><col style="width:35%"><col style="width:30%"><col style="width:35%"></colgroup>
             <thead>
-              <tr><th>Product</th><th>Recommended Width</th><th>Material Totals</th></tr>
+              <tr><th>Product</th><th>Width</th><th>Totals</th></tr>
             </thead>
             <tbody id="s1calc-crackBody"></tbody>
           </table>
@@ -97,9 +93,10 @@ function s1calc_shortcode($atts) {
         <!-- Total Area Materials -->
         <section class="card" aria-label="Total Area Materials">
           <h2>Total Area Materials (Resurfacer)</h2>
-          <table>
+          <table class="s1calc-tbl-4col">
+            <colgroup><col style="width:25%"><col style="width:18%"><col style="width:22%"><col style="width:35%"></colgroup>
             <thead>
-              <tr><th>Material</th><th>Coats</th><th>Gallons Needed</th><th>Material Totals</th></tr>
+              <tr><th>Material</th><th>Coats</th><th>Gallons</th><th>Totals</th></tr>
             </thead>
             <tbody id="s1calc-totalAreaBody"></tbody>
           </table>
@@ -108,9 +105,10 @@ function s1calc_shortcode($atts) {
         <!-- Zone Product Options -->
         <section class="card" aria-label="Zone Products">
           <h2>Court Zone Product Options</h2>
-          <table>
+          <table class="s1calc-tbl-4col">
+            <colgroup><col style="width:25%"><col style="width:18%"><col style="width:22%"><col style="width:35%"></colgroup>
             <thead>
-              <tr><th>Material</th><th>Coats</th><th>Gallons Needed</th><th>Material Totals</th></tr>
+              <tr><th>Material</th><th>Coats</th><th>Gallons</th><th>Totals</th></tr>
             </thead>
             <tbody id="s1calc-zoneProductsBody"></tbody>
           </table>
@@ -119,9 +117,10 @@ function s1calc_shortcode($atts) {
         <!-- Striping -->
         <section class="card" aria-label="Striping">
           <h2>Striping</h2>
-          <table>
+          <table class="s1calc-tbl-3col">
+            <colgroup><col style="width:35%"><col style="width:25%"><col style="width:40%"></colgroup>
             <thead>
-              <tr><th>Material</th><th>Gallons Needed</th><th>Material Totals</th></tr>
+              <tr><th>Material</th><th>Gallons</th><th>Totals</th></tr>
             </thead>
             <tbody id="s1calc-stripingBody"></tbody>
           </table>
